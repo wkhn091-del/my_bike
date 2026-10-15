@@ -49,9 +49,9 @@ export function Hero({ event, availability, open, proof }: Props) {
         <IllustrativeTag className="top-[calc(var(--header-h)+0.35rem)] left-1/2 bottom-auto z-[1] -translate-x-1/2 text-[0.65rem] md:left-auto md:start-8 md:translate-x-0 md:text-[0.75rem]" />
       ) : null}
 
-      {/* Physical center of the viewport — stable on phone */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 z-[1] w-full max-w-[100vw] -translate-x-1/2 -translate-y-1/2 px-4 sm:px-6">
-        <div className="hero-copy mx-auto flex w-full max-w-[22rem] flex-col items-center text-center sm:max-w-md md:max-w-[42rem] md:items-start md:text-start">
+      {/* Centered on phone; nudged slightly right on desktop */}
+      <div className="pointer-events-none absolute top-1/2 left-1/2 z-[1] w-full max-w-[100vw] -translate-x-1/2 -translate-y-1/2 px-4 sm:px-6 md:left-[54%] lg:left-[56%]">
+        <div className="hero-copy mx-auto flex w-full max-w-[22rem] flex-col items-center text-center sm:max-w-md md:mx-0 md:max-w-[42rem] md:items-start md:text-start">
           <div className="pointer-events-auto flex w-full justify-center md:justify-start">
             <HeroProof proof={proof} />
           </div>
