@@ -1,0 +1,105 @@
+import { defineField, defineType } from "sanity";
+
+const PHONE = /^[0-9+\-\s]{9,20}$/;
+
+export const siteSettings = defineType({
+  name: "siteSettings",
+  title: "פרטי העסק",
+  type: "document",
+  groups: [
+    { name: "contact", title: "יצירת קשר", default: true },
+    { name: "legal", title: "משפטי" },
+    { name: "social", title: "רשתות חברתיות וליווי" },
+    { name: "proof", title: "הוכחות ואמון" },
+  ],
+  fields: [
+    defineField({ name: "phone", title: "טלפון", type: "string", group: "contact", validation: (r) => r.required().regex(PHONE) }),
+    defineField({
+      name: "whatsapp",
+      title: "וואטסאפ (בפורמט בינלאומי)",
+      description: "למשל 972527841250, בלי + ובלי 0 בהתחלה",
+      type: "string",
+      group: "contact",
+      validation: (r) => r.required().regex(/^972\d{8,9}$/),
+    }),
+    defineField({ name: "email", title: "מייל", type: "string", group: "contact", validation: (r) => r.required().email().max(120) }),
+    defineField({ name: "answeringHours", title: "שעות מענה", description: "למשל: א׳–ה׳ 9:00–19:00", type: "string", group: "contact", validation: (r) => r.max(120) }),
+    defineField({
+      name: "accessibility",
+      title: "רכז/ת נגישות",
+      type: "object",
+      group: "legal",
+      fields: [
+        defineField({ name: "name", title: "שם", type: "string", validation: (r) => r.required().max(80) }),
+        defineField({ name: "phone", title: "טלפון", type: "string", validation: (r) => r.required().regex(PHONE) }),
+        defineField({ name: "email", title: "מייל", type: "string", validation: (r) => r.required().email() }),
+      ],
+    }),
+    defineField({ name: "legalName", title: "שם העסק הרשמי", type: "string", group: "legal", validation: (r) => r.max(120) }),
+    defineField({ name: "vatNumber", title: "מספר עוסק", type: "string", group: "legal", validation: (r) => r.regex(/^\d{8,9}$/) }),
+    defineField({ name: "address", title: "כתובת העסק", type: "string", group: "legal", validation: (r) => r.max(200) }),
+    defineField({
+      name: "healthDeclaration",
+      title: "הצהרת בריאות",
+      description: "הנוסח המאושר על ידי עורך הדין. שורה ריקה מפרידה בין פסקאות.",
+      type: "text",
+      rows: 8,
+      group: "legal",
+      validation: (r) => r.max(4000),
+    }),
+    defineField({ name: "instagramUrl", title: "קישור לאינסטגרם", type: "url", group: "social", validation: (r) => r.uri({ scheme: ["https"] }) }),
+    defineField({ name: "facebookUrl", title: "קישור לפייסבוק", type: "url", group: "social", validation: (r) => r.uri({ scheme: ["https"] }) }),
+    defineField({ name: "stravaUrl", title: "קישור לסטרבה", type: "url", group: "social", validation: (r) => r.uri({ scheme: ["https"] }) }),
+    defineField({ name: "youtubeUrl", title: "קישור ליוטיוב", type: "url", group: "social", validation: (r) => r.uri({ scheme: ["https"] }) }),
+    defineField({ name: "instagramFollowers", title: "מספר עוקבים (כמו שמופיע, למשל 12.4K)", type: "string", group: "social", validation: (r) => r.max(20) }),
+    defineField({ name: "followersAsOf", title: "נכון לתאריך", type: "date", group: "social" }),
+    defineField({ name: "coachingText", title: "טקסט על הליווי השנתי", type: "text", rows: 3, group: "social", validation: (r) => r.max(400) }),
+    defineField({ name: "coachingResponseDays", title: "תוך כמה ימים חוזרים לפניית ליווי", type: "number", group: "social", validation: (r) => r.integer().min(1).max(30) }),
+    defineField({
+      name: "google",
+      title: "ביקורות ב-Google",
+      description: "מעתיקים בדיוק מהפרופיל ב-Google. באתר יופיע רק כשכל השדות מולאו, עם קישור לפרופיל. לעדכן פעם בחודש.",
+      type: "object",
+      group: "proof",
+      fields: [
+        defineField({ name: "rating", title: "דירוג (למשל 4.9)", type: "number", validation: (r) => r.min(1).max(5).precision(1) }),
+        defineField({ name: "reviewCount", title: "מספר ביקורות", type: "number", validation: (r) => r.integer().min(1).max(100_000) }),
+        defineField({ name: "profileUrl", title: "קישור לפרופיל", type: "url", validation: (r) => r.uri({ scheme: ["https"] }) }),
+        defineField({ name: "checkedAt", title: "נבדק בתאריך", type: "date" }),
+      ],
+    }),
+    defineField({
+      name: "pastEdition",
+      title: "המהדורה הקודמת של יום הקהילה",
+      description: "רק מספרים שאפשר להוכיח מרשימת הנרשמים.",
+      type: "object",
+      group: "proof",
+      fields: [
+        defineField({ name: "riders", title: "כמה רוכבים השתתפו", type: "number", validation: (r) => r.integer().min(1).max(1000) }),
+        defineField({ name: "soldOut", title: "כל המקומות נתפסו", type: "boolean", initialValue: false }),
+        defineField({ name: "date", title: "תאריך המהדורה", type: "date" }),
+      ],
+    }),
+    defineField({
+      name: "credentials",
+      title: "תעודות, ביטוח ושותפים",
+      description: "רק מה שיש עליו מסמך. שותף עסקי מופיע רק עם אישור בכתב ממנו.",
+      type: "array",
+      group: "proof",
+      validation: (r) => r.max(6),
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({ name: "title", title: "מה (למשל: מאמן אופניים מוסמך)", type: "string", validation: (r) => r.required().max(80) }),
+            defineField({ name: "issuer", title: "מי הנפיק (למשל: מכון וינגייט)", type: "string", validation: (r) => r.max(80) }),
+            defineField({ name: "year", title: "שנה", type: "number", validation: (r) => r.integer().min(1980).max(2100) }),
+            defineField({ name: "url", title: "קישור לאימות (לא חובה)", type: "url", validation: (r) => r.uri({ scheme: ["https"] }) }),
+          ],
+          preview: { select: { title: "title", subtitle: "issuer" } },
+        },
+      ],
+    }),
+  ],
+  preview: { prepare: () => ({ title: "פרטי העסק" }) },
+});

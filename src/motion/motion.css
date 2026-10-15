@@ -1,0 +1,53 @@
+/*
+  Elements that will animate in start hidden, so there is no flash of content before JavaScript
+  runs. Safety nets: no-JS visitors never match, reduced-motion visitors never match, and if the
+  animation code never runs they fade in after 3 seconds anyway.
+*/
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-motion-pending] {
+    opacity: 0;
+    animation: mk-failsafe 0.4s ease 3s forwards;
+  }
+}
+
+@keyframes mk-failsafe {
+  to {
+    opacity: 1;
+  }
+}
+
+.mk-marquee {
+  overflow: hidden;
+  width: 100%;
+}
+.mk-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: mk-marquee-rtl var(--mk-duration, 30s) linear infinite;
+}
+.mk-marquee__group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--mk-gap, 3rem);
+  padding-inline-end: var(--mk-gap, 3rem);
+}
+@keyframes mk-marquee-rtl {
+  to {
+    transform: translateX(50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mk-marquee__track {
+    animation: none;
+  }
+  .mk-marquee {
+    overflow-x: auto;
+  }
+}
+
+/* Keeps descenders from being clipped by the line mask. */
+.mk-split-line-mask {
+  padding-block-end: 0.2em;
+  margin-block-end: -0.2em;
+}

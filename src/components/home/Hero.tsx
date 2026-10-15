@@ -1,0 +1,129 @@
+import Image from "next/image";
+import type { CSSProperties } from "react";
+import { CtaLink } from "@/components/ui/CtaLink";
+import type { EventContent } from "@/lib/content/types";
+import type { PublicAvailability } from "@/lib/checkout/service";
+import { formatDayMonth, formatShekels, formatWeekday, inPlace } from "@/lib/format";
+import { ILLUSTRATIVE } from "@/content/illustrative";
+import { Magnetic } from "@/motion/Magnetic";
+import type { HeroProof as HeroProofData } from "@/lib/content/proof";
+import { HeroProof } from "./HeroProof";
+import { IllustrativeTag } from "./IllustrativeTag";
+
+type Props = { event: EventContent; availability: PublicAvailability; open: boolean; proof: HeroProofData };
+
+/**
+ * Stable conversion hero: full-bleed photo, offer locked to the bottom band
+ * (grid 1fr / auto — no flex guessing that breaks on mobile).
+ */
+export function Hero({ event, availability, open, proof }: Props) {
+  const soldOut = availability.seatsLeft === 0;
+  const place = inPlace(event.region);
+  const earlyLeft = event.early ? Math.min(event.early.seats, availability.earlySeatsLeft) : 0;
+  const usingCms = Boolean(event.heroImage);
+  const image = event.heroImage
+    ? { src: event.heroImage.url, alt: event.heroImage.alt, blur: event.heroImage.lqip }
+    : { src: ILLUSTRATIVE.hero.src, alt: ILLUSTRATIVE.hero.alt, blur: null };
+
+  return (
+    <section
+      id="hero"
+      aria-labelledby="hero-title"
+      className="relative isolate grid min-h-[100svh] min-h-[100dvh] grid-rows-[minmax(0,1fr)_auto] overflow-hidden bg-charcoal text-cream"
+    >
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          placeholder={typeof image.src === "string" ? (image.blur ? "blur" : "empty") : "blur"}
+          blurDataURL={image.blur ?? undefined}
+          className="hero-settle object-cover object-[68%_32%] md:object-[58%_42%]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal from-0% via-charcoal/75 via-[42%] to-transparent to-[72%]" />
+        <div className="absolute inset-y-0 start-0 hidden w-[55%] bg-gradient-to-l from-charcoal/65 to-transparent md:block" />
+        <div className="absolute inset-x-0 top-0 h-[var(--header-h)] bg-gradient-to-b from-charcoal/50 to-transparent" />
+      </div>
+
+      {!usingCms ? (
+        <IllustrativeTag className="top-[calc(var(--header-h)+0.5rem)] end-3 bottom-auto z-[1] start-auto text-[0.65rem] md:end-auto md:start-8 md:text-[0.75rem]" />
+      ) : null}
+
+      {/* Top photo band — stays empty on purpose so the trail shows */}
+      <div className="min-h-[32svh] md:min-h-[20svh]" aria-hidden="true" />
+
+      <div className="hero-copy pointer-events-none relative z-[1] w-full bg-gradient-to-t from-charcoal via-charcoal/90 to-transparent pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-8 md:bg-none md:pb-20 md:pt-0">
+        <div className="container-x text-start md:mx-auto md:max-w-[42rem] lg:ms-[12%] lg:me-auto lg:max-w-[40rem]">
+          <div className="pointer-events-auto max-w-full">
+            <HeroProof proof={proof} />
+          </div>
+          <p
+            className="hero-in mt-3 text-[0.8rem] font-semibold tracking-wide text-cream/80 sm:text-micro"
+            style={{ "--d": "100ms" } as CSSProperties}
+          >
+            {event.title} · {formatWeekday(event.date)} <bdi>{formatDayMonth(event.date)}</bdi> · {place}
+          </p>
+          <h1
+            id="hero-title"
+            className="hero-display mt-2 max-w-[11ch] drop-shadow-[0_8px_28px_rgba(0,0,0,0.55)] sm:max-w-[12ch]"
+          >
+            <span className="hero-line">
+              <span style={{ "--i": 0 } as CSSProperties}>די לרכוב לבד</span>
+            </span>{" "}
+            <span className="hero-line">
+              <span style={{ "--i": 1 } as CSSProperties}>באותו מסלול</span>
+            </span>
+          </h1>
+          <p
+            className="hero-in mt-3 max-w-xl text-[1.02rem] leading-relaxed text-cream/90 sm:mt-4 sm:text-lead"
+            style={{ "--d": "550ms" } as CSSProperties}
+          >
+            {formatWeekday(event.date)} אחד {place} עם <bdi>{event.capacity}</bdi> רוכבים ברמה שלכם: מסלול מודרך,
+            ארוחות, סדנאות וצלם. <bdi className="font-bold text-cream">{formatShekels(event.priceAgorot)}</bdi>, הכול
+            כלול.
+          </p>
+          {open && event.early && earlyLeft > 0 ? (
+            <p className="hero-in mt-2 text-small text-cream/80" style={{ "--d": "650ms" } as CSSProperties}>
+              מחיר מוקדם <bdi>{formatShekels(event.early.priceAgorot)}</bdi> · נשארו <bdi>{earlyLeft}</bdi> מקומות במחיר
+              הזה
+            </p>
+          ) : null}
+
+          <div className="hero-in pointer-events-auto mt-5" style={{ "--d": "750ms" } as CSSProperties}>
+            <Magnetic className="w-full md:w-auto">
+              <CtaLink
+                href="/register"
+                id="hero-cta"
+                location="hero"
+                className="btn-primary w-full min-h-14 touch-manipulation px-6 text-[1.05rem] sm:px-9 sm:text-lead md:w-auto"
+              >
+                {soldOut ? "לרשימת ההמתנה" : open ? `שמרו לי מקום ${place}` : "לעדכון כשההרשמה נפתחת"}
+              </CtaLink>
+            </Magnetic>
+            <p className="mt-2.5 flex items-start gap-2 text-[0.8rem] leading-snug text-cream/80 sm:items-center sm:text-micro">
+              <span className="mt-1.5 inline-block size-2 shrink-0 rounded-full bg-sunset sm:mt-0" aria-hidden="true" />
+              <span>
+                {soldOut ? (
+                  <>
+                    כל <bdi>{event.capacity}</bdi> המקומות נתפסו · אם מתפנה מקום, נודיע ראשונים
+                  </>
+                ) : open ? (
+                  <>
+                    החזר מלא עד 14 יום לפני · נשארו <bdi>{availability.seatsLeft}</bdi> מתוך <bdi>{event.capacity}</bdi>
+                  </>
+                ) : (
+                  <>
+                    <bdi>{event.capacity}</bdi> מקומות בלבד · ההרשמה נפתחת בקרוב
+                  </>
+                )}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
