@@ -13,7 +13,7 @@ import { IllustrativeTag } from "./IllustrativeTag";
 type Props = { event: EventContent; availability: PublicAvailability; open: boolean; proof: HeroProofData };
 
 /**
- * Mobile + desktop: copy vertically centered in the viewport.
+ * Full-viewport hero. Copy is absolutely centered (optical middle of the screen).
  */
 export function Hero({ event, availability, open, proof }: Props) {
   const soldOut = availability.seatsLeft === 0;
@@ -28,7 +28,7 @@ export function Hero({ event, availability, open, proof }: Props) {
     <section
       id="hero"
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[100svh] min-h-[100dvh] flex-col overflow-hidden bg-charcoal text-cream"
+      className="relative isolate h-[100svh] h-[100dvh] max-h-[100dvh] overflow-hidden bg-charcoal text-cream"
     >
       <div className="absolute inset-0 -z-10">
         <Image
@@ -40,24 +40,23 @@ export function Hero({ event, availability, open, proof }: Props) {
           sizes="100vw"
           placeholder={typeof image.src === "string" ? (image.blur ? "blur" : "empty") : "blur"}
           blurDataURL={image.blur ?? undefined}
-          className="hero-settle object-cover object-[68%_28%] md:object-[58%_42%]"
+          className="hero-settle object-cover object-[68%_30%] md:object-[58%_42%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/75 via-charcoal/45 to-charcoal/90" />
-        <div className="absolute inset-x-0 top-0 h-[var(--header-h)] bg-gradient-to-b from-charcoal/55 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/70 via-charcoal/35 to-charcoal/85" />
       </div>
 
       {!usingCms ? (
         <IllustrativeTag className="top-[calc(var(--header-h)+0.35rem)] left-1/2 bottom-auto z-[1] -translate-x-1/2 text-[0.65rem] md:left-auto md:start-8 md:translate-x-0 md:text-[0.75rem]" />
       ) : null}
 
-      {/* Vertically centered in the screen */}
-      <div className="hero-copy pointer-events-none relative z-[1] flex flex-1 flex-col justify-center px-0 pt-[var(--header-h)] pb-[calc(env(safe-area-inset-bottom)+1.25rem)] md:pb-16">
+      {/* Forced optical center — not bottom band */}
+      <div className="hero-copy pointer-events-none absolute inset-x-0 top-[48%] z-[1] -translate-y-1/2 px-0 md:top-1/2">
         <div className="container-x mx-auto w-full max-w-xl text-center md:max-w-[42rem] md:text-start">
           <div className="pointer-events-auto inline-flex max-w-full justify-center md:justify-start">
             <HeroProof proof={proof} />
           </div>
           <p
-            className="hero-in mt-3 text-[0.78rem] font-semibold tracking-wide text-cream/80 sm:text-micro"
+            className="hero-in mt-2.5 text-[0.78rem] font-semibold tracking-wide text-cream/80 sm:text-micro"
             style={{ "--d": "100ms" } as CSSProperties}
           >
             {event.title} · {formatWeekday(event.date)} <bdi>{formatDayMonth(event.date)}</bdi> · {place}
@@ -71,7 +70,7 @@ export function Hero({ event, availability, open, proof }: Props) {
             </span>
           </h1>
           <p
-            className="hero-in mx-auto mt-3 max-w-md text-[0.95rem] leading-relaxed text-cream/90 md:mx-0 md:mt-4 md:max-w-xl md:text-lead"
+            className="hero-in mx-auto mt-3 max-w-md text-[0.92rem] leading-relaxed text-cream/90 md:mx-0 md:mt-4 md:max-w-xl md:text-lead"
             style={{ "--d": "550ms" } as CSSProperties}
           >
             {formatWeekday(event.date)} אחד {place} עם <bdi>{event.capacity}</bdi> רוכבים ברמה שלכם: מסלול מודרך, ארוחות,
