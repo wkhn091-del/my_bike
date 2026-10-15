@@ -13,7 +13,8 @@ import { IllustrativeTag } from "./IllustrativeTag";
 type Props = { event: EventContent; availability: PublicAvailability; open: boolean; proof: HeroProofData };
 
 /**
- * Mobile: centered offer in the bottom band. Desktop: reading-edge block, still optically centered.
+ * Mobile: copy sits high under the header (not pinned to the bottom).
+ * Desktop: same upper band, reading-edge aligned.
  */
 export function Hero({ event, availability, open, proof }: Props) {
   const soldOut = availability.seatsLeft === 0;
@@ -28,7 +29,7 @@ export function Hero({ event, availability, open, proof }: Props) {
     <section
       id="hero"
       aria-labelledby="hero-title"
-      className="relative isolate grid min-h-[100svh] min-h-[100dvh] grid-rows-[minmax(0,1fr)_auto] overflow-hidden bg-charcoal text-cream"
+      className="relative isolate flex min-h-[100svh] min-h-[100dvh] flex-col overflow-hidden bg-charcoal text-cream"
     >
       <div className="absolute inset-0 -z-10">
         <Image
@@ -40,20 +41,19 @@ export function Hero({ event, availability, open, proof }: Props) {
           sizes="100vw"
           placeholder={typeof image.src === "string" ? (image.blur ? "blur" : "empty") : "blur"}
           blurDataURL={image.blur ?? undefined}
-          className="hero-settle object-cover object-[68%_32%] md:object-[58%_42%]"
+          className="hero-settle object-cover object-[68%_28%] md:object-[58%_42%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-charcoal from-0% via-charcoal/80 via-[45%] to-transparent to-[75%]" />
-        <div className="absolute inset-x-0 top-0 h-[var(--header-h)] bg-gradient-to-b from-charcoal/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/75 via-charcoal/45 to-charcoal/90" />
+        <div className="absolute inset-x-0 top-0 h-[var(--header-h)] bg-gradient-to-b from-charcoal/55 to-transparent" />
       </div>
 
       {!usingCms ? (
-        <IllustrativeTag className="top-[calc(var(--header-h)+0.5rem)] left-1/2 bottom-auto z-[1] -translate-x-1/2 text-[0.65rem] md:left-auto md:start-8 md:translate-x-0 md:text-[0.75rem]" />
+        <IllustrativeTag className="top-[calc(var(--header-h)+0.35rem)] left-1/2 bottom-auto z-[1] -translate-x-1/2 text-[0.65rem] md:left-auto md:start-8 md:translate-x-0 md:text-[0.75rem]" />
       ) : null}
 
-      <div className="min-h-[30svh] md:min-h-[18svh]" aria-hidden="true" />
-
-      <div className="hero-copy pointer-events-none relative z-[1] w-full bg-gradient-to-t from-charcoal via-charcoal/95 to-transparent pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-6 md:bg-none md:pb-20 md:pt-0">
-        <div className="container-x mx-auto max-w-xl text-center md:max-w-[42rem] md:text-start">
+      {/* Content starts under the header — deliberately high on the phone */}
+      <div className="hero-copy pointer-events-none relative z-[1] flex flex-1 flex-col justify-start pt-[calc(var(--header-h)+1.75rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)] md:justify-center md:pt-[calc(var(--header-h)+2.5rem)] md:pb-20">
+        <div className="container-x mx-auto w-full max-w-xl text-center md:max-w-[42rem] md:text-start">
           <div className="pointer-events-auto inline-flex max-w-full justify-center md:justify-start">
             <HeroProof proof={proof} />
           </div>
