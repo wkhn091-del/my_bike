@@ -13,8 +13,7 @@ import { IllustrativeTag } from "./IllustrativeTag";
 type Props = { event: EventContent; availability: PublicAvailability; open: boolean; proof: HeroProofData };
 
 /**
- * Mobile: copy sits high under the header (not pinned to the bottom).
- * Desktop: same upper band, reading-edge aligned.
+ * Mobile + desktop: copy vertically centered in the viewport.
  */
 export function Hero({ event, availability, open, proof }: Props) {
   const soldOut = availability.seatsLeft === 0;
@@ -51,8 +50,8 @@ export function Hero({ event, availability, open, proof }: Props) {
         <IllustrativeTag className="top-[calc(var(--header-h)+0.35rem)] left-1/2 bottom-auto z-[1] -translate-x-1/2 text-[0.65rem] md:left-auto md:start-8 md:translate-x-0 md:text-[0.75rem]" />
       ) : null}
 
-      {/* Content starts under the header — deliberately high on the phone */}
-      <div className="hero-copy pointer-events-none relative z-[1] flex flex-1 flex-col justify-start pt-[calc(var(--header-h)+1.75rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)] md:justify-center md:pt-[calc(var(--header-h)+2.5rem)] md:pb-20">
+      {/* Vertically centered in the screen */}
+      <div className="hero-copy pointer-events-none relative z-[1] flex flex-1 flex-col justify-center px-0 pt-[var(--header-h)] pb-[calc(env(safe-area-inset-bottom)+1.25rem)] md:pb-16">
         <div className="container-x mx-auto w-full max-w-xl text-center md:max-w-[42rem] md:text-start">
           <div className="pointer-events-auto inline-flex max-w-full justify-center md:justify-start">
             <HeroProof proof={proof} />
