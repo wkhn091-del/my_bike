@@ -77,7 +77,13 @@ const serverEnvSchema = z
     if (env.PAYMENTS_MODE !== "mock" && !env.CARDCOM_TERMINAL) {
       ctx.addIssue({ code: "custom", path: ["CARDCOM_TERMINAL"], message: "Required when PAYMENTS_MODE is live or test." });
     }
-    if (env.VERCEL_ENV === "production") {
+    /**
+     * Full production (real charges) requires live payments + every secret.
+     * Public demo / portfolio deploys may set DEMO_PUBLIC=1 with PAYMENTS_MODE=mock
+     * so the marketing site can ship without Neon/Sanity/Cardcom wired yet.
+     */
+    const demoPublic = process.env.DEMO_PUBLIC === "1";
+    if (env.VERCEL_ENV === "production" && !demoPublic) {
       if (env.PAYMENTS_MODE !== "live") {
         ctx.addIssue({ code: "custom", path: ["PAYMENTS_MODE"], message: "Production must use PAYMENTS_MODE=live." });
       }
@@ -97,6 +103,13 @@ const serverEnvSchema = z
       for (const key of required) {
         if (!env[key]) ctx.addIssue({ code: "custom", path: [key], message: "Required in production." });
       }
+    }
+    if (env.VERCEL_ENV === "production" && demoPublic && env.PAYMENTS_MODE !== "mock") {
+      ctx.addIssue({
+        code: "custom",
+        path: ["PAYMENTS_MODE"],
+        message: "DEMO_PUBLIC=1 requires PAYMENTS_MODE=mock (no real charges).",
+      });
     }
     if (env.VERCEL_ENV === "preview" && env.PAYMENTS_MODE !== "test") {
       ctx.addIssue({ code: "custom", path: ["PAYMENTS_MODE"], message: "Preview deployments must use PAYMENTS_MODE=test (no real charges, no free mock orders)." });
