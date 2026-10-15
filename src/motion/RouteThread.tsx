@@ -36,7 +36,7 @@ export function RouteThread() {
   );
 
   return (
-    <div ref={ref} aria-hidden="true" className="pointer-events-none absolute inset-y-0 start-1.5 z-30 w-3 mix-blend-difference md:start-[1.6vw]">
+    <div ref={ref} aria-hidden="true" className="pointer-events-none absolute inset-y-0 start-1.5 z-30 hidden w-3 mix-blend-difference md:block md:start-[1.6vw]">
       <div
         data-thread-line=""
         className="absolute inset-y-0 start-[5px] w-[2px] origin-top"

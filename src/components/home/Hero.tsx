@@ -13,8 +13,7 @@ import { IllustrativeTag } from "./IllustrativeTag";
 type Props = { event: EventContent; availability: PublicAvailability; open: boolean; proof: HeroProofData };
 
 /**
- * Stable conversion hero: full-bleed photo, offer locked to the bottom band
- * (grid 1fr / auto — no flex guessing that breaks on mobile).
+ * Mobile: centered offer in the bottom band. Desktop: reading-edge block, still optically centered.
  */
 export function Hero({ event, availability, open, proof }: Props) {
   const soldOut = availability.seatsLeft === 0;
@@ -43,33 +42,28 @@ export function Hero({ event, availability, open, proof }: Props) {
           blurDataURL={image.blur ?? undefined}
           className="hero-settle object-cover object-[68%_32%] md:object-[58%_42%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-charcoal from-0% via-charcoal/75 via-[42%] to-transparent to-[72%]" />
-        <div className="absolute inset-y-0 start-0 hidden w-[55%] bg-gradient-to-l from-charcoal/65 to-transparent md:block" />
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal from-0% via-charcoal/80 via-[45%] to-transparent to-[75%]" />
         <div className="absolute inset-x-0 top-0 h-[var(--header-h)] bg-gradient-to-b from-charcoal/50 to-transparent" />
       </div>
 
       {!usingCms ? (
-        <IllustrativeTag className="top-[calc(var(--header-h)+0.5rem)] end-3 bottom-auto z-[1] start-auto text-[0.65rem] md:end-auto md:start-8 md:text-[0.75rem]" />
+        <IllustrativeTag className="top-[calc(var(--header-h)+0.5rem)] left-1/2 bottom-auto z-[1] -translate-x-1/2 text-[0.65rem] md:left-auto md:start-8 md:translate-x-0 md:text-[0.75rem]" />
       ) : null}
 
-      {/* Top photo band — stays empty on purpose so the trail shows */}
-      <div className="min-h-[32svh] md:min-h-[20svh]" aria-hidden="true" />
+      <div className="min-h-[30svh] md:min-h-[18svh]" aria-hidden="true" />
 
-      <div className="hero-copy pointer-events-none relative z-[1] w-full bg-gradient-to-t from-charcoal via-charcoal/90 to-transparent pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-8 md:bg-none md:pb-20 md:pt-0">
-        <div className="container-x text-start md:mx-auto md:max-w-[42rem] lg:ms-[12%] lg:me-auto lg:max-w-[40rem]">
-          <div className="pointer-events-auto max-w-full">
+      <div className="hero-copy pointer-events-none relative z-[1] w-full bg-gradient-to-t from-charcoal via-charcoal/95 to-transparent pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-6 md:bg-none md:pb-20 md:pt-0">
+        <div className="container-x mx-auto max-w-xl text-center md:max-w-[42rem] md:text-start">
+          <div className="pointer-events-auto inline-flex max-w-full justify-center md:justify-start">
             <HeroProof proof={proof} />
           </div>
           <p
-            className="hero-in mt-3 text-[0.8rem] font-semibold tracking-wide text-cream/80 sm:text-micro"
+            className="hero-in mt-3 text-[0.78rem] font-semibold tracking-wide text-cream/80 sm:text-micro"
             style={{ "--d": "100ms" } as CSSProperties}
           >
             {event.title} · {formatWeekday(event.date)} <bdi>{formatDayMonth(event.date)}</bdi> · {place}
           </p>
-          <h1
-            id="hero-title"
-            className="hero-display mt-2 max-w-[11ch] drop-shadow-[0_8px_28px_rgba(0,0,0,0.55)] sm:max-w-[12ch]"
-          >
+          <h1 id="hero-title" className="hero-display mx-auto mt-2 max-w-[14ch] drop-shadow-[0_8px_28px_rgba(0,0,0,0.55)] md:mx-0 md:max-w-[12ch]">
             <span className="hero-line">
               <span style={{ "--i": 0 } as CSSProperties}>די לרכוב לבד</span>
             </span>{" "}
@@ -78,12 +72,11 @@ export function Hero({ event, availability, open, proof }: Props) {
             </span>
           </h1>
           <p
-            className="hero-in mt-3 max-w-xl text-[1.02rem] leading-relaxed text-cream/90 sm:mt-4 sm:text-lead"
+            className="hero-in mx-auto mt-3 max-w-md text-[0.95rem] leading-relaxed text-cream/90 md:mx-0 md:mt-4 md:max-w-xl md:text-lead"
             style={{ "--d": "550ms" } as CSSProperties}
           >
-            {formatWeekday(event.date)} אחד {place} עם <bdi>{event.capacity}</bdi> רוכבים ברמה שלכם: מסלול מודרך,
-            ארוחות, סדנאות וצלם. <bdi className="font-bold text-cream">{formatShekels(event.priceAgorot)}</bdi>, הכול
-            כלול.
+            {formatWeekday(event.date)} אחד {place} עם <bdi>{event.capacity}</bdi> רוכבים ברמה שלכם: מסלול מודרך, ארוחות,
+            סדנאות וצלם. <bdi className="font-bold text-cream">{formatShekels(event.priceAgorot)}</bdi>, הכול כלול.
           </p>
           {open && event.early && earlyLeft > 0 ? (
             <p className="hero-in mt-2 text-small text-cream/80" style={{ "--d": "650ms" } as CSSProperties}>
@@ -92,19 +85,19 @@ export function Hero({ event, availability, open, proof }: Props) {
             </p>
           ) : null}
 
-          <div className="hero-in pointer-events-auto mt-5" style={{ "--d": "750ms" } as CSSProperties}>
+          <div className="hero-in pointer-events-auto mx-auto mt-5 max-w-sm md:mx-0 md:max-w-none" style={{ "--d": "750ms" } as CSSProperties}>
             <Magnetic className="w-full md:w-auto">
               <CtaLink
                 href="/register"
                 id="hero-cta"
                 location="hero"
-                className="btn-primary w-full min-h-14 touch-manipulation px-6 text-[1.05rem] sm:px-9 sm:text-lead md:w-auto"
+                className="btn-primary w-full min-h-12 touch-manipulation px-6 text-base md:min-h-14 md:w-auto md:px-9 md:text-lead"
               >
                 {soldOut ? "לרשימת ההמתנה" : open ? `שמרו לי מקום ${place}` : "לעדכון כשההרשמה נפתחת"}
               </CtaLink>
             </Magnetic>
-            <p className="mt-2.5 flex items-start gap-2 text-[0.8rem] leading-snug text-cream/80 sm:items-center sm:text-micro">
-              <span className="mt-1.5 inline-block size-2 shrink-0 rounded-full bg-sunset sm:mt-0" aria-hidden="true" />
+            <p className="mt-2.5 flex items-start justify-center gap-2 text-[0.78rem] leading-snug text-cream/80 md:justify-start md:text-micro">
+              <span className="mt-1.5 inline-block size-2 shrink-0 rounded-full bg-sunset md:mt-0.5" aria-hidden="true" />
               <span>
                 {soldOut ? (
                   <>
