@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { AboutYoav } from "@/components/home/AboutYoav";
 import { Closing } from "@/components/home/Closing";
 import { CoachingForm } from "@/components/home/CoachingForm";
+import { ContactBand } from "@/components/home/ContactBand";
 import { DaySchedule } from "@/components/home/DaySchedule";
 import { FactsMarquee } from "@/components/home/FactsMarquee";
 import { Manifesto } from "@/components/home/Manifesto";
@@ -105,6 +106,8 @@ export default async function HomePage() {
             <CoachingForm turnstileKey={turnstileSiteKey()} responseDays={settings.coachingResponseDays} />
           </div>
         </section>
+
+        <ContactBand settings={settings} />
       </main>
       <Footer settings={settings} cta={<Closing event={event} availability={availability} open={open} />} />
 

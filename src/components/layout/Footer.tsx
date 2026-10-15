@@ -44,7 +44,7 @@ function Col({ title, links }: { title: string; links: ReadonlyArray<readonly [s
   );
 }
 
-/** Premium dark footer — brand + columns on desktop, stacked on mobile. */
+/** Premium dark footer. No WhatsApp here — ContactBand + float cover that. */
 export function Footer({ settings, cta }: { settings: SiteSettings; cta?: ReactNode }) {
   const business = [settings.legalName, settings.vatNumber ? `עוסק מורשה ${settings.vatNumber}` : null, settings.address].filter(Boolean);
   const social: Array<{ name: BrandName; href: string; label: string }> = [
@@ -60,8 +60,7 @@ export function Footer({ settings, cta }: { settings: SiteSettings; cta?: ReactN
 
       <div className="border-t border-cream/[0.08]">
         <div className="mx-auto max-w-6xl px-5 pt-14 pb-[calc(env(safe-area-inset-bottom)+7rem)] md:px-8 md:pt-20 md:pb-14">
-          {/* Top: brand + link columns */}
-          <div className="grid gap-12 md:grid-cols-[1.2fr_1fr_1fr_1fr] md:gap-10 lg:gap-14">
+          <div className="grid gap-12 md:grid-cols-[1.35fr_1fr_1fr_1fr] md:gap-10 lg:gap-14">
             <div className="max-w-xs">
               <Logo tone="light" />
               <p className="mt-4 text-[0.9rem] leading-relaxed text-cream/55">
@@ -102,16 +101,6 @@ export function Footer({ settings, cta }: { settings: SiteSettings; cta?: ReactN
                 </li>
                 <li>
                   <a
-                    href={`https://wa.me/${settings.whatsapp}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-10 items-center text-[0.9rem] text-cream/70 transition-colors hover:text-cream"
-                  >
-                    וואטסאפ
-                  </a>
-                </li>
-                <li>
-                  <a
                     href={`mailto:${settings.email}`}
                     className="inline-flex min-h-10 items-center text-[0.9rem] text-cream/70 transition-colors hover:text-cream"
                   >
@@ -125,7 +114,6 @@ export function Footer({ settings, cta }: { settings: SiteSettings; cta?: ReactN
             </div>
           </div>
 
-          {/* Bottom utility bar */}
           <div className="mt-14 flex flex-col gap-5 border-t border-cream/[0.08] pt-6 md:mt-16 md:flex-row md:items-center md:justify-between md:gap-8">
             <nav aria-label="מידע משפטי">
               <ul className="flex flex-wrap gap-x-5 gap-y-1">

@@ -486,12 +486,19 @@ html.has-custom-cursor :is(input, textarea, select, [contenteditable]) {
 
 .hero-display {
   font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(1.85rem, 1.35rem + 4.5vw, 5rem);
+  font-size: clamp(1.7rem, 1.2rem + 3.8vw, 5rem);
   font-weight: 700;
   letter-spacing: -0.03em;
-  line-height: 1.05;
+  line-height: 1.08;
   color: var(--color-cream);
   text-wrap: balance;
+  text-align: inherit;
+}
+@media (min-width: 640px) {
+  .hero-display {
+    font-size: clamp(2rem, 1.3rem + 4.2vw, 5rem);
+    line-height: 1.05;
+  }
 }
 @media (min-width: 768px) {
   .hero-display {
