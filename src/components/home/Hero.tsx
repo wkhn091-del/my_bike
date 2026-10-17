@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import type { CSSProperties } from "react";
 import { CtaLink } from "@/components/ui/CtaLink";
 import type { EventContent } from "@/lib/content/types";
@@ -8,29 +8,80 @@ import { ILLUSTRATIVE } from "@/content/illustrative";
 import { Magnetic } from "@/motion/Magnetic";
 import type { HeroProof as HeroProofData } from "@/lib/content/proof";
 import { HeroProof } from "./HeroProof";
-import { IllustrativeTag } from "./IllustrativeTag";
 
 type Props = { event: EventContent; availability: PublicAvailability; open: boolean; proof: HeroProofData };
 
+type CollageCard = { src: StaticImageData; title: string };
+
+/** Arch mosaic — illustrative photos only (same set as the rest of the site). */
+const CARDS: CollageCard[] = [
+  { src: ILLUSTRATIVE.moments[2].src, title: "רכיבה בגליל" },
+  { src: ILLUSTRATIVE.route.src, title: "מסלול מודרך" },
+  { src: ILLUSTRATIVE.hero.src, title: "עם החבר׳ה" },
+  { src: ILLUSTRATIVE.moments[0].src, title: "ארוחות בשטח" },
+  { src: ILLUSTRATIVE.moments[1].src, title: "סדנאות" },
+  { src: ILLUSTRATIVE.moments[2].src, title: "שקיעה בגליל" },
+  { src: ILLUSTRATIVE.route.src, title: "שבילי עפר" },
+  { src: ILLUSTRATIVE.hero.src, title: "צלם מקצועי" },
+  { src: ILLUSTRATIVE.moments[0].src, title: "הכול כלול" },
+];
+
+function ArchCard({ card }: { card: CollageCard }) {
+  return (
+    <div className="hero-card-tile">
+      <div className="relative h-full w-full">
+        <Image
+          src={card.src}
+          alt=""
+          fill
+          quality={90}
+          sizes="(max-width: 768px) 40vw, 220px"
+          className="object-cover"
+          placeholder="empty"
+        />
+        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-1 bg-gradient-to-t from-charcoal via-charcoal/80 to-transparent px-2 pb-2 pt-10">
+          <p className="text-center text-[0.65rem] font-bold leading-tight text-cream">{card.title}</p>
+          <span className="inline-flex rounded-full bg-cream px-2.5 py-0.5 text-[0.52rem] font-semibold text-charcoal">לפרטים</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ArchCollage() {
+  return (
+    <div className="relative flex justify-center px-4 pb-4 md:h-full md:items-center md:justify-center md:self-stretch md:px-6 md:pb-8 md:pt-[calc(var(--header-h)+0.5rem)]">
+      {/* Outer float: shadow lives outside the clip so the arch “lifts” off the photo */}
+      <div className="hero-arch-float" aria-hidden="true">
+        <div className="hero-arch hero-arch-mask">
+          <div className="hero-arch-grid">
+            {CARDS.map((card, i) => (
+              <div key={`${card.title}-${i}`} className={`hero-arch-col hero-arch-col-${i % 3}`}>
+                <ArchCard card={card} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /**
- * Full-viewport hero. Copy stays dead-center; mobile spacing is tightened so it fits the phone.
+ * Public hero copy unchanged — only the illustrative visual is the arched card mosaic.
+ * Mobile: copy → arch (soft fade). Desktop: copy | arch (hard cut).
  */
 export function Hero({ event, availability, open, proof }: Props) {
   const soldOut = availability.seatsLeft === 0;
   const place = inPlace(event.region);
   const earlyLeft = event.early ? Math.min(event.early.seats, availability.earlySeatsLeft) : 0;
-  const usingCms = Boolean(event.heroImage);
   const image = event.heroImage
     ? { src: event.heroImage.url, alt: event.heroImage.alt, blur: event.heroImage.lqip }
     : { src: ILLUSTRATIVE.hero.src, alt: ILLUSTRATIVE.hero.alt, blur: null };
 
   return (
-    <section
-      id="hero"
-      aria-labelledby="hero-title"
-      className="relative isolate h-[100svh] h-[100dvh] max-h-[100dvh] overflow-hidden bg-charcoal text-cream"
-    >
-      <div className="absolute inset-0 -z-10">
+    <section id="hero" aria-labelledby="hero-title" className="hero-stage relative isolate overflow-x-clip text-cream">
+      <div className="absolute inset-0 -z-10" aria-hidden="true">
         <Image
           src={image.src}
           alt={image.alt}
@@ -40,18 +91,19 @@ export function Hero({ event, availability, open, proof }: Props) {
           sizes="100vw"
           placeholder={typeof image.src === "string" ? (image.blur ? "blur" : "empty") : "blur"}
           blurDataURL={image.blur ?? undefined}
-          className="hero-settle object-cover object-[68%_30%] md:object-[58%_42%]"
+          className="hero-settle object-cover object-[50%_35%]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/65 via-charcoal/40 to-charcoal/80" />
       </div>
 
-      {!usingCms ? (
-        <IllustrativeTag className="top-[calc(var(--header-h)+0.35rem)] left-1/2 bottom-auto z-[1] -translate-x-1/2 text-[0.65rem] md:left-auto md:start-8 md:translate-x-0 md:text-[0.75rem]" />
-      ) : null}
+      {/* Soft wash for copy only — leave the photo open around the floating arch */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-charcoal/45 via-transparent to-charcoal/20 md:bg-gradient-to-l md:from-charcoal/40 md:via-transparent md:to-transparent"
+        aria-hidden="true"
+      />
 
-      {/* Centered on phone; ~24px nudge right on desktop — still clear of the edge */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 z-[1] w-full max-w-[100vw] -translate-x-1/2 -translate-y-1/2 px-4 sm:px-6 md:translate-x-[calc(-50%+1.5rem)] md:px-10">
-        <div className="hero-copy mx-auto flex w-full max-w-[22rem] flex-col items-center text-center sm:max-w-md md:max-w-[40rem] md:items-start md:text-start">
+      <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col gap-4 pb-8 pt-[calc(var(--header-h)+0.75rem)] md:grid md:min-h-[100svh] md:grid-cols-2 md:items-center md:gap-8 md:pb-12 md:pt-[calc(var(--header-h)+1rem)]">
+        {/* Same copy as public — wording, hierarchy, CTA */}
+        <div className="hero-copy flex w-full flex-col items-center px-4 text-center drop-shadow-[0_4px_24px_rgba(0,0,0,0.55)] sm:px-6 md:items-start md:px-10 md:text-start lg:px-12">
           <div className="pointer-events-auto flex w-full justify-center md:justify-start">
             <HeroProof proof={proof} />
           </div>
@@ -85,12 +137,14 @@ export function Hero({ event, availability, open, proof }: Props) {
 
           {open && event.early && earlyLeft > 0 ? (
             <p className="hero-in mt-2 text-[0.8rem] text-cream/80 sm:text-small" style={{ "--d": "650ms" } as CSSProperties}>
-              מחיר מוקדם <bdi>{formatShekels(event.early.priceAgorot)}</bdi> · נשארו <bdi>{earlyLeft}</bdi> מקומות במחיר
-              הזה
+              מחיר מוקדם <bdi>{formatShekels(event.early.priceAgorot)}</bdi> · נשארו <bdi>{earlyLeft}</bdi> מקומות במחיר הזה
             </p>
           ) : null}
 
-          <div className="hero-in pointer-events-auto mt-4 w-full max-w-xs sm:mt-5 sm:max-w-sm md:max-w-none" style={{ "--d": "750ms" } as CSSProperties}>
+          <div
+            className="hero-in pointer-events-auto mt-4 w-full max-w-xs sm:mt-5 sm:max-w-sm md:max-w-none"
+            style={{ "--d": "750ms" } as CSSProperties}
+          >
             <Magnetic className="w-full md:w-auto">
               <CtaLink
                 href="/register"
@@ -121,6 +175,9 @@ export function Hero({ event, availability, open, proof }: Props) {
             </p>
           </div>
         </div>
+
+        {/* Only change: illustrative arch collage */}
+        <ArchCollage />
       </div>
     </section>
   );

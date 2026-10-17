@@ -516,3 +516,140 @@ html.has-custom-cursor :is(input, textarea, select, [contenteditable]) {
     --text-micro: 0.875rem;
   }
 }
+
+/* Split-card hero: arch mask + tilted 3-col mosaic */
+.hero-arch-title {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(2.35rem, 6.5vw, 4.25rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.hero-stage {
+  --hero-card-w: clamp(5.25rem, 24vw, 6.5rem);
+  --hero-card-h: calc(var(--hero-card-w) * 1.88);
+}
+@media (min-width: 768px) {
+  .hero-stage {
+    --hero-card-w: 7.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .hero-stage {
+    --hero-card-w: 8.25rem;
+  }
+}
+
+/* Lifted frame — sits in front of the photo like a cut-out window */
+.hero-arch-float {
+  position: relative;
+  width: 100%;
+  max-width: 16.5rem;
+  /* Soft ground shadow under the arch (not a filter — keeps mosaic sharp) */
+  filter: none;
+  box-shadow:
+    0 4px 8px rgb(0 0 0 / 0.12),
+    0 22px 48px rgb(0 0 0 / 0.38),
+    0 40px 80px rgb(0 0 0 / 0.22);
+  border-radius: 999px 999px 0 0;
+}
+@media (min-width: 768px) {
+  .hero-arch-float {
+    max-width: 26rem;
+    box-shadow:
+      0 8px 16px rgb(0 0 0 / 0.14),
+      0 32px 64px rgb(0 0 0 / 0.42),
+      0 56px 100px rgb(0 0 0 / 0.28);
+  }
+}
+
+.hero-arch {
+  position: relative;
+  width: 100%;
+  height: 16.5rem;
+  overflow: hidden;
+  border-radius: 999px 999px 0 0;
+  /* Bright rim — reads as a glass cutout leaving the photo */
+  border: 1.5px solid rgb(255 255 255 / 0.72);
+  background: transparent;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.35),
+    inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+@media (min-width: 768px) {
+  .hero-arch {
+    height: min(78svh, 40rem);
+    border-color: rgb(255 255 255 / 0.78);
+  }
+}
+
+/* Soft bottom fade on mobile — desktop keeps a hard arch cut */
+.hero-arch-mask {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 48%,
+    rgb(0 0 0 / 0.55) 72%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 48%,
+    rgb(0 0 0 / 0.55) 72%,
+    transparent 100%
+  );
+}
+@media (min-width: 768px) {
+  .hero-arch-mask {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+.hero-arch-grid {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  grid-template-columns: repeat(3, var(--hero-card-w));
+  gap: 0.5rem;
+  transform: translate3d(-50%, -47%, 0) rotate(-14deg);
+  transform-origin: center center;
+  backface-visibility: hidden;
+}
+
+.hero-arch-col-0 {
+  transform: translateY(12%);
+}
+.hero-arch-col-1 {
+  transform: translateY(-14%);
+}
+.hero-arch-col-2 {
+  transform: translateY(12%);
+}
+
+.hero-card-tile {
+  width: var(--hero-card-w);
+  height: var(--hero-card-h);
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  background: rgb(31 33 28 / 0.35);
+  box-shadow:
+    0 10px 22px rgb(0 0 0 / 0.4),
+    0 2px 4px rgb(0 0 0 / 0.2);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.hero-card-tile img {
+  transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-arch-grid {
+    transform: translate3d(-50%, -47%, 0);
+  }
+}
