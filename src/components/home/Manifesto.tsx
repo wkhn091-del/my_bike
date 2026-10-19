@@ -10,7 +10,7 @@ export function Manifesto({ event }: { event: EventContent }) {
         <p className="text-micro font-semibold tracking-wide text-olive">מכירים את זה?</p>
         <ScrollWords
           className="mt-6 max-w-5xl font-display text-statement text-charcoal"
-          text={`אותו מסלול, אותה שעה, לבד. לא בטוחים שתעמדו בקצב של קבוצה, ולא יודעים לאן להמשיך מכאן. ${event.title} נבנה בדיוק בשביל זה: יום אחד ${inPlace(event.region)}, עם רוכבים ברמה שלכם, ומדריך שרוכב איתכם כל הדרך.`}
+          text={`אותו מסלול, אותה שעה, לבד. לא בטוחים שתעמדו בקצב של קבוצה, ולא יודעים לאן להמשיך מכאן. ${event.title} בשביל מי שרוכב לבד ומחפש קבוצה בקצב שלו: יום אחד ${inPlace(event.region)}, עם רוכבים בקצב שלכם, ומדריך שרוכב איתכם כל הדרך.`}
         />
       </div>
     </section>

@@ -3,7 +3,14 @@
 import { useRef, type ReactNode } from "react";
 import { gsap, useGSAP } from "./gsap";
 
-export type StoryScene = { key: string; media: ReactNode; badge?: ReactNode; step: string; title: string; detail: string };
+export type StoryScene = {
+  key: string;
+  media: ReactNode;
+  badge?: ReactNode;
+  step: string;
+  title: string;
+  detail: string;
+};
 
 /**
  * A pinned, scroll-driven film: each scene's photo settles from a slow zoom (Ken Burns) and dissolves
@@ -90,21 +97,21 @@ export function ScrollStory({ scenes }: { scenes: StoryScene[] }) {
             <div data-media="" className="absolute inset-0 will-change-transform">
               {scene.media}
             </div>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/30 to-charcoal/10" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal from-15% via-charcoal/55 via-45% to-charcoal/15" />
             {scene.badge}
-            <figcaption className="container-x absolute inset-x-0 bottom-0 pb-14 md:pb-20">
+            <figcaption className="container-x absolute inset-x-0 bottom-0 pb-10 pe-6 md:pb-16 md:pe-10">
               <span className="block overflow-hidden">
                 <span data-line="" className="block text-micro font-semibold tracking-wide text-cream/70">
                   {String(index + 1).padStart(2, "0")} · {scene.step}
                 </span>
               </span>
               <span className="mt-2 block overflow-hidden pb-[0.12em]">
-                <span data-line="" className="block max-w-4xl font-display text-[clamp(2.5rem,1.4rem+5vw,6rem)] leading-[1.02] tracking-[-0.02em]">
+                <span data-line="" className="block max-w-[18ch] font-display text-[clamp(1.75rem,1.25rem+2.4vw,3.25rem)] leading-[1.12] tracking-[-0.02em] md:max-w-[22ch]">
                   {scene.title}
                 </span>
               </span>
               <span className="mt-3 block overflow-hidden">
-                <span data-line="" className="block max-w-xl text-lead text-cream/80">
+                <span data-line="" className="block max-w-md text-small text-cream/80 md:max-w-lg md:text-lead">
                   {scene.detail}
                 </span>
               </span>
@@ -112,10 +119,10 @@ export function ScrollStory({ scenes }: { scenes: StoryScene[] }) {
           </figure>
         ))}
 
-        <div aria-hidden="true" className="container-x absolute inset-x-0 top-[calc(var(--header-h)+1.25rem)] z-50 hidden group-data-[story=on]/story:block">
-          <div className="flex justify-between gap-4 text-micro font-semibold text-cream">
+        <div aria-hidden="true" className="container-x absolute inset-x-0 top-[calc(var(--header-h)+1rem)] z-50 hidden group-data-[story=on]/story:block">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-micro font-semibold text-cream md:justify-between md:gap-4">
             {scenes.map((scene) => (
-              <span key={scene.key} data-step="">
+              <span key={scene.key} data-step="" className="shrink-0">
                 {scene.step}
               </span>
             ))}

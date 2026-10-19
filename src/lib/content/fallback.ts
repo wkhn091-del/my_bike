@@ -39,7 +39,7 @@ export const fallbackContent: SiteContent = {
     friendDiscountAgorot: null,
     salesOpen: true,
     schedule: [],
-    included: ["ארוחות לאורך היום", "סדנאות מקצועיות", "צילום מקצועי לאורך היום", "הדרכה של יואב לאורך כל המסלול"],
+    included: ["ארוחות לאורך היום", "סדנת טכניקה בשטח", "צלם שרוכב איתכם לאורך היום", "הדרכה של יואב לאורך כל המסלול"],
     route: { km: null, elevationM: null, terrain: null, bikes: null, fitText: null, paceText: null, stravaUrl: null },
     photosDelivery: null,
     safety: null,
@@ -48,7 +48,7 @@ export const fallbackContent: SiteContent = {
   },
   testimonials: [],
   faq: [
-    { question: "אני מתחיל. אני אעמוד בקצב?", answer: "המסלול בנוי לרוכבים מתחילים-בינוניים שכבר רוכבים באופן קבוע." },
+    { question: "אני מתחיל. אני אעמוד בקצב?", answer: "המסלול בנוי לרוכבים מתחילים-בינוניים שכבר רוכבים פעם־פעמיים בשבוע." },
     {
       question: "אני לא מכיר אף אחד. זה מוזר לבוא לבד?",
       answer: "רוב הקהילה מכירה את יואב מהאינסטגרם, והיום מתחיל בהיכרות.",

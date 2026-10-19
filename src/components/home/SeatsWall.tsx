@@ -142,9 +142,9 @@ export function SeatsWall({ capacity, taken, named, open }: Props) {
         <div className="hidden rounded-[1.5rem] border border-dashed border-cream/15 p-5 lg:block md:p-6">
           <p className="text-micro font-semibold tracking-[0.16em] text-cream/50">מה מחכה בשטח</p>
           <ul className="mt-3 space-y-2 text-small text-cream/75">
-            <li>מסלול מודרך ברמה שלכם</li>
+            <li>מסלול מודרך בקצב שלכם</li>
             <li>ארוחות לאורך היום</li>
-            <li>סדנאות + צלם</li>
+            <li>סדנת טכניקה + צלם</li>
           </ul>
         </div>
       </div>

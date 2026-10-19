@@ -13,7 +13,7 @@ export function eventJsonLd(content: SiteContent, availability: PublicAvailabili
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: { "@type": "Place", name: event.meetingPoint ?? event.region, address: { "@type": "PostalAddress", addressRegion: event.region, addressCountry: "IL" } },
     image: event.heroImage ? [event.heroImage.url] : undefined,
-    description: `יום רכיבה מודרך ${inPlace(event.region)} עם ${event.capacity} רוכבים מהקהילה. ארוחות, סדנאות מקצועיות וצילום כלולים.`,
+    description: `יום רכיבה מודרך ${inPlace(event.region)} עם ${event.capacity} רוכבים מהקהילה. ארוחות, סדנת טכניקה וצלם שרוכב איתכם — כלולים.`,
     organizer: { "@type": "Person", name: "יואב לוי", url: siteUrl },
     offers: {
       "@type": "Offer",

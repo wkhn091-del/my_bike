@@ -7,9 +7,19 @@ import { IllustrativeTag } from "./IllustrativeTag";
 
 const COPY = [
   { step: "עוצרים לאכול", title: "ארוחות לאורך היום", detail: "עוצרים לאכול יחד, בלי לסחוב כלום ובלי לתכנן." },
-  { step: "לומדים בשטח", title: "סדנאות מקצועיות בשטח", detail: "לומדים משהו שתיקחו איתכם לכל רכיבה מעכשיו." },
-  { step: "מסיימים יחד", title: "מסיימים יחד בשקיעה", detail: "תצפית אחרונה, כולם יחד, וחוזרים הביתה עם חברים חדשים." },
+  { step: "לומדים בשטח", title: "לומדים טכניקה על הסינגל", detail: "לומדים עליות, ירידות וקווים — ומיישמים עוד באותו יום." },
+  { step: "מסיימים יחד", title: "מסיימים יחד בשקיעה", detail: "מסיימים יחד בתצפית, בלי להתפזר בדרך חזרה." },
 ];
+
+/**
+ * Keep faces / main subject in the upper half so the bottom caption band
+ * never sits on top of the important part of the photo (phone + desktop).
+ */
+const MOOD_FOCUS = [
+  "object-[center_28%] md:object-[center_32%]",
+  "object-[center_30%] md:object-[center_35%]",
+  "object-[center_38%] md:object-[center_42%]",
+] as const;
 
 /** Real gallery photos from Sanity when there are 3; until then, clearly labelled mood images. */
 export function Moments({ gallery }: { gallery: SiteImage[] }) {
@@ -21,11 +31,28 @@ export function Moments({ gallery }: { gallery: SiteImage[] }) {
       key: copy.title,
       ...copy,
       media: photo ? (
-        <Image src={photo.url} alt={photo.alt} fill sizes="100vw" placeholder={photo.lqip ? "blur" : "empty"} blurDataURL={photo.lqip ?? undefined} className="object-cover" />
+        <Image
+          src={photo.url}
+          alt={photo.alt}
+          fill
+          sizes="100vw"
+          placeholder={photo.lqip ? "blur" : "empty"}
+          blurDataURL={photo.lqip ?? undefined}
+          className="object-cover object-[center_30%]"
+        />
       ) : (
-        <Image src={mood.src} alt={mood.alt} fill sizes="100vw" placeholder="blur" className="object-cover" />
+        <Image
+          src={mood.src}
+          alt={mood.alt}
+          fill
+          sizes="100vw"
+          placeholder="blur"
+          className={`object-cover ${MOOD_FOCUS[index]}`}
+        />
       ),
-      badge: photo ? undefined : <IllustrativeTag className="top-[calc(var(--header-h)+4.5rem)] bottom-auto start-6 md:start-10" />,
+      badge: photo ? undefined : (
+        <IllustrativeTag className="top-[calc(var(--header-h)+4.5rem)] bottom-auto start-6 md:start-10" />
+      ),
     };
   });
 

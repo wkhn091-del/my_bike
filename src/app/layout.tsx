@@ -16,7 +16,7 @@ const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo", di
 export async function generateMetadata(): Promise<Metadata> {
   const { event } = await getSiteContent();
   const title = `${event.title} של RideWithYoav · יום רכיבה מודרך ${inPlace(event.region)}, ${formatShortDate(event.date)}`;
-  const description = `יום רכיבה מודרך ${inPlace(event.region)} עם ${event.capacity} רוכבים מהקהילה: ארוחות, סדנאות מקצועיות וצילום כלולים. ${event.priceAgorot / 100} ₪ לרוכב, כולל מע״מ.`;
+  const description = `יום רכיבה מודרך ${inPlace(event.region)} עם ${event.capacity} רוכבים מהקהילה: ארוחות, סדנת טכניקה וצלם שרוכב איתכם — כלולים. ${event.priceAgorot / 100} ₪ לרוכב, כולל מע״מ.`;
   return {
     metadataBase: new URL(siteUrl),
     title: { default: title, template: "%s · RideWithYoav" },

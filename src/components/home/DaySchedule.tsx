@@ -36,7 +36,7 @@ export function DaySchedule({ event }: { event: EventContent }) {
 
         <p className="mt-8 flex items-start gap-3 measure">
           <Icon name="camera" className="mt-1 size-6 shrink-0 text-olive" />
-          <span>לאורך כל היום: צלם מקצועי.{event.photosDelivery ? ` התמונות נשלחות אליכם ${event.photosDelivery}.` : ""}</span>
+          <span>לאורך כל היום: צלם שרוכב איתכם.{event.photosDelivery ? ` התמונות נשלחות אליכם ${event.photosDelivery}.` : ""}</span>
         </p>
       </div>
     </section>

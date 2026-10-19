@@ -79,7 +79,7 @@ export function PriceAndPeace({ event, availability, open }: Props) {
             ) : (
               <div className="rounded-2xl border border-dashed border-charcoal/15 bg-olive/[0.06] p-4">
                 <dt className="text-small text-charcoal-soft">מה כלול</dt>
-                <dd className="mt-1 text-small font-semibold text-charcoal">מסלול · ארוחות · סדנאות · צלם</dd>
+                <dd className="mt-1 text-small font-semibold text-charcoal">מסלול · ארוחות · סדנת טכניקה · צלם</dd>
               </div>
             )}
           </dl>
@@ -90,7 +90,7 @@ export function PriceAndPeace({ event, availability, open }: Props) {
         </div>
 
         <div className="mx-auto w-full max-w-lg rounded-[1.5rem] border border-charcoal/8 bg-gradient-to-b from-cream to-cream-deep/40 p-5 shadow-[0_24px_60px_-40px_rgba(31,33,28,0.35)] md:mx-0 md:max-w-none md:rounded-[1.75rem] md:p-8">
-          <p className="text-center text-micro font-semibold tracking-[0.16em] text-olive md:text-start">שקט נפשי</p>
+          <p className="text-center text-micro font-semibold tracking-[0.16em] text-olive md:text-start">ביטול, גשם ותשלום</p>
           <Reveal as="ul" stagger className="mt-5 grid gap-5 md:mt-6 md:gap-6">
             <li className="flex gap-3 md:gap-4">
               <span className="grid size-9 shrink-0 place-items-center rounded-full bg-olive/10 md:size-11">

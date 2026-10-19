@@ -9,7 +9,9 @@ export function AboutYoav({ content }: { content: SiteContent }) {
   const { settings, event } = content;
   const asOf = settings.followersAsOf ? new Date(`${settings.followersAsOf}T12:00:00Z`).toLocaleDateString("he-IL") : null;
   const followers = asOf ? settings.instagramFollowers : null;
-  const community = followers ? `ובונה קהילה שגדלה ל-${followers} עוקבים באינסטגרם` : "ובונה קהילה";
+  const community = followers
+    ? `ומלווה רוכבים מהאינסטגרם לרכיבות בשטח — כבר ${followers} עוקבים`
+    : "ומלווה רוכבים מהאינסטגרם לרכיבות בשטח";
   const { credentials } = settings.proof;
 
   return (

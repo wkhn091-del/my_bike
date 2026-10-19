@@ -527,17 +527,17 @@ html.has-custom-cursor :is(input, textarea, select, [contenteditable]) {
 }
 
 .hero-stage {
-  --hero-card-w: clamp(5.25rem, 24vw, 6.5rem);
+  --hero-card-w: clamp(4.85rem, 22vw, 6rem);
   --hero-card-h: calc(var(--hero-card-w) * 1.88);
 }
 @media (min-width: 768px) {
   .hero-stage {
-    --hero-card-w: 7.5rem;
+    --hero-card-w: 7rem;
   }
 }
 @media (min-width: 1024px) {
   .hero-stage {
-    --hero-card-w: 8.25rem;
+    --hero-card-w: 7.75rem;
   }
 }
 
@@ -545,7 +545,7 @@ html.has-custom-cursor :is(input, textarea, select, [contenteditable]) {
 .hero-arch-float {
   position: relative;
   width: 100%;
-  max-width: 16.5rem;
+  max-width: 15.5rem;
   /* Soft ground shadow under the arch (not a filter â€” keeps mosaic sharp) */
   filter: none;
   box-shadow:
@@ -570,17 +570,17 @@ html.has-custom-cursor :is(input, textarea, select, [contenteditable]) {
   height: 16.5rem;
   overflow: hidden;
   border-radius: 999px 999px 0 0;
-  /* Bright rim â€” reads as a glass cutout leaving the photo */
-  border: 1.5px solid rgb(255 255 255 / 0.72);
+  border: 1.5px solid rgb(255 255 255 / 0.95);
+  /* Transparent window ? hero photo shows between cards */
   background: transparent;
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.35),
-    inset 0 0 0 1px rgb(255 255 255 / 0.08);
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    inset 0 0 0 1px rgb(255 255 255 / 0.2);
 }
 @media (min-width: 768px) {
   .hero-arch {
     height: min(78svh, 40rem);
-    border-color: rgb(255 255 255 / 0.78);
+    border-color: #fff;
   }
 }
 
@@ -614,32 +614,79 @@ html.has-custom-cursor :is(input, textarea, select, [contenteditable]) {
   left: 50%;
   display: grid;
   grid-template-columns: repeat(3, var(--hero-card-w));
-  gap: 0.5rem;
-  transform: translate3d(-50%, -47%, 0) rotate(-14deg);
+  gap: 0.4rem;
+  /*
+   * Tall mosaic + rotate(-11°) pulls mid content left and opens a right gap.
+   * Strong right shift + scale so both sides overflow the arch and get clipped.
+   */
+  transform: translate3d(calc(-50% + 3.25rem), -46%, 0) rotate(-11deg) scale(1.22);
   transform-origin: center center;
   backface-visibility: hidden;
+  will-change: transform;
 }
 
+.hero-arch-col {
+  overflow: hidden;
+}
+
+/* Mild stagger ? keep columns overlapping so the arch stays packed */
 .hero-arch-col-0 {
-  transform: translateY(12%);
+  transform: translateY(4%);
 }
 .hero-arch-col-1 {
-  transform: translateY(-14%);
+  transform: translateY(-6%);
 }
 .hero-arch-col-2 {
-  transform: translateY(12%);
+  transform: translateY(4%);
+}
+
+/**
+ * Infinite upward loop: two identical sets, translateY(-50%) linear infinite.
+ * No reverse / no bounce. Seam stays invisible because sets are identical.
+ */
+.hero-arch-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  animation: hero-marquee-up 90s linear infinite;
+  animation-direction: normal;
+}
+.hero-arch-set {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  padding-bottom: 0.4rem;
+}
+.hero-arch-col-1 .hero-arch-track {
+  animation-duration: 78s;
+  animation-delay: -26s;
+}
+.hero-arch-col-2 .hero-arch-track {
+  animation-duration: 100s;
+  animation-delay: -44s;
+}
+
+@keyframes hero-marquee-up {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -50%, 0);
+  }
 }
 
 .hero-card-tile {
   width: var(--hero-card-w);
   height: var(--hero-card-h);
+  flex-shrink: 0;
   overflow: hidden;
   border-radius: 16px;
-  border: 1px solid rgb(255 255 255 / 0.28);
-  background: rgb(31 33 28 / 0.35);
+  border: 1px solid rgb(31 33 28 / 0.1);
+  background: #fff;
   box-shadow:
-    0 10px 22px rgb(0 0 0 / 0.4),
-    0 2px 4px rgb(0 0 0 / 0.2);
+    0 8px 20px rgb(0 0 0 / 0.18),
+    0 2px 4px rgb(0 0 0 / 0.08);
   transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -650,6 +697,61 @@ html.has-custom-cursor :is(input, textarea, select, [contenteditable]) {
 
 @media (prefers-reduced-motion: reduce) {
   .hero-arch-grid {
-    transform: translate3d(-50%, -47%, 0);
+    transform: translate3d(calc(-50% + 3.25rem), -46%, 0) scale(1.22);
+  }
+  .hero-arch-track {
+    animation: none;
   }
 }
+
+/* RideRoadmap — scroll-pinned path + glowing checkpoints */
+.roadmap-node {
+  transition:
+    border-color 0.35s var(--ease-soft-out),
+    color 0.35s var(--ease-soft-out),
+    background-color 0.35s var(--ease-soft-out),
+    box-shadow 0.45s var(--ease-soft-out),
+    transform 0.45s var(--ease-soft-out);
+}
+.roadmap-node[data-active] {
+  border-color: rgb(224 122 46 / 0.55);
+  color: #fff;
+  background: rgb(224 122 46 / 0.2);
+  box-shadow:
+    0 0 0 1px rgb(224 122 46 / 0.28),
+    0 0 28px 4px rgb(224 122 46 / 0.32),
+    0 12px 40px rgb(0 0 0 / 0.5);
+}
+.roadmap-node-glow {
+  opacity: 0;
+  background: radial-gradient(circle, rgb(224 122 46 / 0.55), transparent 70%);
+  filter: blur(10px);
+  transition: opacity 0.4s var(--ease-soft-out);
+}
+.roadmap-node[data-active] .roadmap-node-glow {
+  opacity: 1;
+  animation: roadmap-pulse 2.4s var(--ease-soft-out) infinite;
+}
+@keyframes roadmap-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .roadmap-node[data-active] .roadmap-node-glow {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+.roadmap-section[data-roadmap="on"] .roadmap-stage {
+  height: 100svh;
+  overflow: hidden;
+}
+

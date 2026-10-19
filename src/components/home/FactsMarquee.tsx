@@ -10,8 +10,8 @@ export function FactsMarquee({ event }: { event: EventContent }) {
     `${event.capacity} רוכבים`,
     `${formatShekels(event.priceAgorot)} הכול כלול`,
     "ארוחות לאורך היום",
-    "סדנאות מקצועיות",
-    "צלם מקצועי",
+    "סדנת טכניקה בשטח",
+    "צלם שרוכב איתכם",
     "החזר מלא עד 14 יום לפני",
   ];
   return (

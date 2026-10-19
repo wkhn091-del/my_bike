@@ -10,8 +10,8 @@ import { Numbers } from "@/components/home/Numbers";
 import { Hero } from "@/components/home/Hero";
 import { HomeFaq } from "@/components/home/HomeFaq";
 import { Included } from "@/components/home/Included";
-import { Moments } from "@/components/home/Moments";
 import { PriceAndPeace } from "@/components/home/PriceAndPeace";
+import { RideRoadmap } from "@/components/home/RideRoadmap";
 import { RouteLevel } from "@/components/home/RouteLevel";
 import { ScrollDepth } from "@/components/home/ScrollDepth";
 import { StickyCta } from "@/components/home/StickyCta";
@@ -67,8 +67,8 @@ export default async function HomePage() {
           <RouteThread />
           <Manifesto event={event} />
           <Numbers event={event} />
+          <RideRoadmap gallery={content.gallery} />
           {event.schedule.length ? <DaySchedule event={event} /> : null}
-          <Moments gallery={content.gallery} />
           <RouteLevel event={event} />
           <Included event={event} />
           <AboutYoav content={content} />

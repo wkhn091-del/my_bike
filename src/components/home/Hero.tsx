@@ -1,9 +1,10 @@
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import type { CSSProperties } from "react";
 import { CtaLink } from "@/components/ui/CtaLink";
 import type { EventContent } from "@/lib/content/types";
 import type { PublicAvailability } from "@/lib/checkout/service";
 import { formatDayMonth, formatShekels, formatWeekday, inPlace } from "@/lib/format";
+import { home, type HeroCard } from "@/content/home";
 import { ILLUSTRATIVE } from "@/content/illustrative";
 import { Magnetic } from "@/motion/Magnetic";
 import type { HeroProof as HeroProofData } from "@/lib/content/proof";
@@ -11,22 +12,15 @@ import { HeroProof } from "./HeroProof";
 
 type Props = { event: EventContent; availability: PublicAvailability; open: boolean; proof: HeroProofData };
 
-type CollageCard = { src: StaticImageData; title: string };
+/** 3 columns from home.hero.cards. */
+const COLS = [0, 1, 2].map((col) => home.hero.cards.filter((_, i) => i % 3 === col));
 
-/** Arch mosaic — illustrative photos only (same set as the rest of the site). */
-const CARDS: CollageCard[] = [
-  { src: ILLUSTRATIVE.moments[2].src, title: "רכיבה בגליל" },
-  { src: ILLUSTRATIVE.route.src, title: "מסלול מודרך" },
-  { src: ILLUSTRATIVE.hero.src, title: "עם החבר׳ה" },
-  { src: ILLUSTRATIVE.moments[0].src, title: "ארוחות בשטח" },
-  { src: ILLUSTRATIVE.moments[1].src, title: "סדנאות" },
-  { src: ILLUSTRATIVE.moments[2].src, title: "שקיעה בגליל" },
-  { src: ILLUSTRATIVE.route.src, title: "שבילי עפר" },
-  { src: ILLUSTRATIVE.hero.src, title: "צלם מקצועי" },
-  { src: ILLUSTRATIVE.moments[0].src, title: "הכול כלול" },
-];
+/** Repeat column cards so one set is tall enough to always cover the arch viewport. */
+function packColumn(cards: HeroCard[], copies = 3): HeroCard[] {
+  return Array.from({ length: copies }, () => cards).flat();
+}
 
-function ArchCard({ card }: { card: CollageCard }) {
+function ArchCard({ card }: { card: HeroCard }) {
   return (
     <div className="hero-card-tile">
       <div className="relative h-full w-full">
@@ -36,7 +30,7 @@ function ArchCard({ card }: { card: CollageCard }) {
           fill
           quality={90}
           sizes="(max-width: 768px) 40vw, 220px"
-          className="object-cover"
+          className={`object-cover ${card.focus}`}
           placeholder="empty"
         />
         <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-1 bg-gradient-to-t from-charcoal via-charcoal/80 to-transparent px-2 pb-2 pt-10">
@@ -51,15 +45,26 @@ function ArchCard({ card }: { card: CollageCard }) {
 function ArchCollage() {
   return (
     <div className="relative flex justify-center px-4 pb-4 md:h-full md:items-center md:justify-center md:self-stretch md:px-6 md:pb-8 md:pt-[calc(var(--header-h)+0.5rem)]">
-      {/* Outer float: shadow lives outside the clip so the arch “lifts” off the photo */}
       <div className="hero-arch-float" aria-hidden="true">
         <div className="hero-arch hero-arch-mask">
           <div className="hero-arch-grid">
-            {CARDS.map((card, i) => (
-              <div key={`${card.title}-${i}`} className={`hero-arch-col hero-arch-col-${i % 3}`}>
-                <ArchCard card={card} />
-              </div>
-            ))}
+            {COLS.map((colCards, col) => {
+              const packed = packColumn(colCards, 3);
+              return (
+                <div key={col} className={`hero-arch-col hero-arch-col-${col}`}>
+                  {/* ×2 identical packed sets → translateY(-50%) seamless upward loop */}
+                  <div className="hero-arch-track">
+                    {[0, 1].map((dup) => (
+                      <div key={dup} className="hero-arch-set">
+                        {packed.map((card, row) => (
+                          <ArchCard key={`${card.title}-${col}-${dup}-${row}`} card={card} />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -131,8 +136,8 @@ export function Hero({ event, availability, open, proof }: Props) {
             className="hero-in mt-2.5 max-w-[34ch] text-[0.88rem] leading-snug text-cream/90 sm:mt-3 sm:max-w-md sm:text-[0.95rem] sm:leading-relaxed md:mt-4 md:max-w-xl md:text-lead"
             style={{ "--d": "550ms" } as CSSProperties}
           >
-            {formatWeekday(event.date)} אחד {place} עם <bdi>{event.capacity}</bdi> רוכבים ברמה שלכם: מסלול מודרך, ארוחות,
-            סדנאות וצלם. <bdi className="font-bold text-cream">{formatShekels(event.priceAgorot)}</bdi>, הכול כלול.
+            {formatWeekday(event.date)} אחד {place} עם <bdi>{event.capacity}</bdi> רוכבים בקצב שלכם: מסלול מודרך, ארוחות,
+            סדנת טכניקה וצלם. <bdi className="font-bold text-cream">{formatShekels(event.priceAgorot)}</bdi>, הכול כלול.
           </p>
 
           {open && event.early && earlyLeft > 0 ? (

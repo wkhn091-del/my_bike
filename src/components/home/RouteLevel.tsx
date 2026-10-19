@@ -23,7 +23,7 @@ export function RouteLevel({ event }: { event: EventContent }) {
         hint="גללו פנימה"
         media={
           <>
-            <Image src={ILLUSTRATIVE.route.src} alt={ILLUSTRATIVE.route.alt} fill sizes="100vw" placeholder="blur" className="object-cover" />
+            <Image src={ILLUSTRATIVE.route.src} alt={ILLUSTRATIVE.route.alt} fill sizes="100vw" placeholder="blur" className="object-cover object-center" />
             <IllustrativeTag className="top-[calc(var(--header-h)+0.75rem)] bottom-auto" />
           </>
         }
@@ -31,10 +31,10 @@ export function RouteLevel({ event }: { event: EventContent }) {
         <div className="container-x pb-16 md:pb-24">
           <p className="text-micro font-semibold tracking-wide text-cream/70">המסלול</p>
           <h2 id="route-title" className="mt-3 max-w-4xl text-h2">
-            {route.km ? `${route.km} ק״מ ${inPlace(event.region)}, ברמה שלכם` : `שבילים ${inPlace(event.region)}, ברמה שלכם`}
+            {route.km ? `${route.km} ק״מ ${inPlace(event.region)}, בקצב שלכם` : `שבילים ${inPlace(event.region)}, בלי לרדוף אחרי קבוצה חזקה`}
           </h2>
           <p className="mt-5 max-w-xl text-lead text-cream/80">
-            המסלול מתאים לרוכבים מתחילים-בינוניים שכבר רוכבים באופן קבוע.{route.paceText ? ` ${route.paceText}` : ""}
+            המסלול מתאים לרוכבים מתחילים-בינוניים שכבר רוכבים פעם־פעמיים בשבוע.{route.paceText ? ` ${route.paceText}` : ""}
           </p>
         </div>
       </TypeGate>

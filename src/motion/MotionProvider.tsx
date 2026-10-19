@@ -6,23 +6,21 @@ import { useEffect, type ReactNode } from "react";
 import { ScrollTrigger } from "./gsap";
 
 /**
- * The kit's provider without Lenis: smooth scrolling is off (module A-3 — on touch it does nothing,
- * on desktop it changes the scroll speed). It only keeps ScrollTrigger measurements fresh.
+ * Refresh ScrollTrigger after navigation / first paint only.
+ * Do NOT ResizeObserver the body: pin-spacers change height and that
+ * creates an infinite refresh loop (page feels like it reloads forever).
  */
 export function MotionProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
-  // Images, fonts and client navigation change the page height after load.
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const observer = new ResizeObserver(() => {
-      clearTimeout(timer);
-      timer = setTimeout(() => ScrollTrigger.refresh(), 200);
-    });
-    observer.observe(document.body);
+    const refresh = () => ScrollTrigger.refresh();
+    const id = requestAnimationFrame(refresh);
+    void document.fonts?.ready.then(refresh);
+    window.addEventListener("load", refresh);
     return () => {
-      clearTimeout(timer);
-      observer.disconnect();
+      cancelAnimationFrame(id);
+      window.removeEventListener("load", refresh);
     };
   }, []);
 
