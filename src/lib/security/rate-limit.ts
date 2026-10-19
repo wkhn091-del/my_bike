@@ -53,12 +53,17 @@ function sharedLimiter(limit: number, windowMs: number): Ratelimit | null {
 /** Keys must not contain raw PII: pass `hashKey(phone)`, never the phone itself. */
 export async function rateLimit(key: string, limit: number, windowMs: number): Promise<boolean> {
   const limiter = sharedLimiter(limit, windowMs);
-  if (!limiter) return memoryLimit(key, limit, windowMs);
+  // Production must use shared Redis — per-instance memory is trivially bypassed at scale.
+  if (!limiter) {
+    if (serverEnv.VERCEL_ENV === "production") return false;
+    return memoryLimit(key, limit, windowMs);
+  }
   try {
     const { success } = await limiter.limit(key);
     return success;
   } catch (error) {
     reportError("rate-limit", error);
+    if (serverEnv.VERCEL_ENV === "production") return false;
     return memoryLimit(key, limit, windowMs);
   }
 }

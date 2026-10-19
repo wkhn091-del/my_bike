@@ -23,6 +23,15 @@ const serverEnvSchema = z
       .trim()
       .max(500)
       .refine((value) => value.startsWith("postgres://") || value.startsWith("postgresql://"), "Must be a Postgres URL")
+      .refine((value) => {
+        try {
+          const host = new URL(value).hostname;
+          if (host === "localhost" || host === "127.0.0.1") return true;
+        } catch {
+          return false;
+        }
+        return /(?:^|[?&])sslmode=(require|verify-full|verify-ca)(?:&|$)/i.test(value);
+      }, "Non-local DATABASE_URL must include sslmode=require (or verify-full / verify-ca)")
       .optional(),
 
     SANITY_PROJECT_ID: z.string().trim().regex(/^[a-z0-9-]{1,40}$/).optional(),
@@ -83,6 +92,14 @@ const serverEnvSchema = z
      * so the marketing site can ship without Neon/Sanity/Cardcom wired yet.
      */
     const demoPublic = process.env.DEMO_PUBLIC === "1";
+    // Demo deploys are marketing-only: never attach a DB (mock checkout would mint free "paid" seats).
+    if (demoPublic && env.DATABASE_URL) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["DATABASE_URL"],
+        message: "DEMO_PUBLIC=1 forbids DATABASE_URL (no persisted mock orders).",
+      });
+    }
     if (env.VERCEL_ENV === "production" && !demoPublic) {
       if (env.PAYMENTS_MODE !== "live") {
         ctx.addIssue({ code: "custom", path: ["PAYMENTS_MODE"], message: "Production must use PAYMENTS_MODE=live." });
@@ -113,6 +130,9 @@ const serverEnvSchema = z
     }
     if (env.VERCEL_ENV === "preview" && env.PAYMENTS_MODE !== "test") {
       ctx.addIssue({ code: "custom", path: ["PAYMENTS_MODE"], message: "Preview deployments must use PAYMENTS_MODE=test (no real charges, no free mock orders)." });
+    }
+    if (env.VERCEL_ENV === "preview" && !env.TURNSTILE_SECRET_KEY) {
+      ctx.addIssue({ code: "custom", path: ["TURNSTILE_SECRET_KEY"], message: "Required on preview (bot protection)." });
     }
   });
 

@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { getSiteContent } from "@/lib/content/get";
 import { getParticipantForConsent } from "@/lib/db/orders";
 import { hasDatabase } from "@/lib/db/pool";
+import { turnstileSiteKey } from "@/lib/env/public";
 import { tokenSecret } from "@/lib/env/server";
 import { formatLongDate } from "@/lib/format";
 import { verifySignedToken } from "@/lib/security/signed-token";
@@ -61,7 +62,7 @@ export default async function ConsentPage({ params }: PageProps<"/consent/[token
                 )}
               </div>
               <div className="mt-8">
-                <ConsentForm token={token} />
+                <ConsentForm token={token} turnstileKey={turnstileSiteKey()} />
               </div>
             </>
           )}

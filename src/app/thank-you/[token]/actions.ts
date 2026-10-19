@@ -11,6 +11,7 @@ import { reportBlocked, reportError } from "@/lib/observability/report";
 import { hashKey, rateLimit } from "@/lib/security/rate-limit";
 import { requestContext } from "@/lib/security/request";
 import { createSignedToken } from "@/lib/security/signed-token";
+import { verifyTurnstile } from "@/lib/security/turnstile";
 import { detailsSchema, fieldErrors, MESSAGES } from "@/lib/validation/forms";
 
 export type DetailsState =
@@ -52,6 +53,11 @@ export async function detailsAction(_previous: DetailsState, formData: FormData)
   const order = orderId ? await getOrder(orderId) : null;
   if (!order || order.status !== "paid") return { status: "error", message: "הקישור לא תקף. אפשר לכתוב ליואב בוואטסאפ" };
 
+  if (!(await verifyTurnstile(formData, "details", ip))) {
+    reportBlocked("turnstile", "details");
+    return { status: "error", message: "לא הצלחנו לוודא שאתם לא רובוט. אפשר ללחוץ שוב" };
+  }
+
   const parsed = detailsSchema.safeParse({
     bikeType: formData.get("bikeType") ?? "",
     participants: readParticipants(formData, order.quantity),
@@ -59,6 +65,7 @@ export async function detailsAction(_previous: DetailsState, formData: FormData)
   if (!parsed.success) return { status: "invalid", fieldErrors: fieldErrors(parsed.error) };
 
   const { event } = await getSiteContent();
+  const buyerEmail = order.email.trim().toLowerCase();
   const errors: Record<string, string> = {};
   const participants: ParticipantInput[] = parsed.data.participants.map((p, index) => {
     const age = ageOn(p.birthDate, event.date);
@@ -66,6 +73,10 @@ export async function detailsAction(_previous: DetailsState, formData: FormData)
     const minor = age < ADULT_AGE;
     if (minor && (!p.parentName || !p.parentPhone || !p.parentEmail)) {
       errors[`participants.${index}.parentEmail`] = "לרוכב מתחת לגיל 18 צריך שם, טלפון ומייל של הורה";
+    }
+    // Parent email must not be the buyer's — blocks self-approving a minor via the thank-you link.
+    if (minor && p.parentEmail && p.parentEmail.trim().toLowerCase() === buyerEmail) {
+      errors[`participants.${index}.parentEmail`] = "מייל ההורה חייב להיות שונה ממייל ההזמנה";
     }
     return {
       position: index + 1,

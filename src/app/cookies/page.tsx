@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CookieChoiceReset } from "@/components/cookies/CookieChoiceReset";
 import { LegalPage } from "@/components/layout/LegalPage";
 
 export const metadata: Metadata = { title: "מדיניות עוגיות", alternates: { canonical: "/cookies" } };
@@ -8,14 +9,14 @@ const ROWS = [
   ["הכרחיות", "Cloudflare Turnstile", "בדיקה שהטופס נשלח על ידי אדם ולא בוט", "זמן קצר"],
   ["מדידה (רק באישור)", "Google Analytics: _ga, _ga_*", "כמה מבקרים, מאיפה הגיעו, מה עובד באתר", "עד 13 חודשים"],
   ["מדידה (רק באישור)", "Microsoft Clarity: _clck, _clsk", "מפות חום והקלטות גלילה, בלי הקלדות", "עד שנה"],
-  ["פרסום (רק באישור)", "Meta Pixel: _fbp", "מדידת קמפיינים באינסטגרם ובפייסבוק", "עד 3 חודשים"],
+  ["פרסום (רק באישור מלא)", "Meta Pixel: _fbp", "מדידת קמפיינים באינסטגרם ובפייסבוק", "עד 3 חודשים"],
 ] as const;
 
 export default function CookiesPage() {
   return (
-    <LegalPage title="מדיניות עוגיות" updated="14.10.2026">
+    <LegalPage title="מדיניות עוגיות" updated="19.10.2026">
       <p>
-        עוגיות הן קבצים קטנים שהדפדפן שומר. באתר יש רק עוגיות הכרחיות, אלא אם אישרתם גם מדידה ופרסום בבאנר. סירוב לא משנה שום דבר בהרשמה או בתשלום.
+        עוגיות הן קבצים קטנים שהדפדפן שומר. באתר יש רק עוגיות הכרחיות, אלא אם אישרתם גם מדידה ו/או פרסום בבאנר. סירוב לא משנה שום דבר בהרשמה או בתשלום.
       </p>
       <h2>אילו עוגיות</h2>
       <div className="mt-4 overflow-x-auto">
@@ -43,7 +44,8 @@ export default function CookiesPage() {
         </table>
       </div>
       <h2>איך משנים את הבחירה</h2>
-      <p>מוחקים את נתוני האתר בהגדרות הדפדפן, והבאנר יופיע שוב בביקור הבא.</p>
+      <p>אפשר לאפס את הבחירה כאן — הבאנר יופיע שוב אחרי רענון העמוד. אפשר גם למחוק את נתוני האתר בהגדרות הדפדפן.</p>
+      <CookieChoiceReset />
     </LegalPage>
   );
 }

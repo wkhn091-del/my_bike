@@ -63,7 +63,7 @@ export function Moments({ gallery }: { gallery: SiteImage[] }) {
         <SplitReveal id="moments-title" className="mt-3 max-w-3xl text-h2">
           יום שלם בחוץ, עם החבר׳ה
         </SplitReveal>
-        <p className="mt-5 max-w-xl text-lead text-cream/75">גללו, ותעברו את היום בעצמכם: מהעצירה הראשונה ועד השקיעה.</p>
+        <p className="mt-5 max-w-xl text-lead text-cream/75">עצירה → סדנה → שקיעה. גללו.</p>
       </div>
       <ScrollStory scenes={scenes} />
     </section>

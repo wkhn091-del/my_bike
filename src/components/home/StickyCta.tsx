@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CtaLink } from "@/components/ui/CtaLink";
 
@@ -29,6 +30,11 @@ export function StickyCta({ label, note, href }: { label: string; note: string; 
         {label}
       </CtaLink>
       <p className="mt-1.5 text-center text-micro text-charcoal-soft">{note}</p>
+      <p className="mt-1 text-center text-[0.7rem] text-charcoal-soft">
+        <Link href="/privacy" className="link">
+          מדיניות פרטיות
+        </Link>
+      </p>
     </div>
   );
 }

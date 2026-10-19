@@ -22,7 +22,7 @@ export function Included({ event }: { event: EventContent }) {
         <div className="md:sticky md:top-28 md:self-start">
           <p className="text-micro font-semibold tracking-wide text-olive">מה מקבלים</p>
           <SplitReveal id="included-title" className="mt-3 text-h2">
-            הכול כלול. באמת הכול.
+            690 ₪. בלי הפתעות בקופה.
           </SplitReveal>
           <p className="mt-8 font-sans leading-none font-black tracking-tighter text-charcoal">
             <bdi>
@@ -36,7 +36,7 @@ export function Included({ event }: { event: EventContent }) {
         <Reveal as="ul" stagger className="self-end border-t border-charcoal">
           {event.included.map((item, index) => (
             <li key={item} className="group flex items-center gap-5 border-b border-charcoal/15 py-7">
-              <span className="w-8 font-sans text-small font-bold text-charcoal/35" aria-hidden="true">
+              <span className="w-8 font-sans text-small font-bold text-charcoal-soft" aria-hidden="true">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <span className="flex-1 font-display text-h3 md:text-[1.75rem]">{item}</span>

@@ -7,7 +7,8 @@ import type { SiteContent } from "./types";
 export const fallbackContent: SiteContent = {
   settings: {
     brand: "RideWithYoav",
-    legalName: null,
+    // Vat/address filled in Sanity Studio (PROJECT_BRIEF ❓). legalName always present for footer/BusinessLine.
+    legalName: "יואב לוי",
     vatNumber: null,
     address: null,
     phone: "052-7841250",
@@ -21,7 +22,7 @@ export const fallbackContent: SiteContent = {
     youtubeUrl: null,
     instagramFollowers: null,
     followersAsOf: null,
-    coachingText: "אני מלווה רוכבים לאורך כל השנה: תוכנית אימונים אישית ומעקב.",
+    coachingText: "אני מלווה רוכבים לאורך השנה: תוכנית שבועית + בדיקה אחת בחודש.",
     coachingResponseDays: null,
     healthDeclaration: null,
     proof: { google: null, pastEdition: null, credentials: [] },
@@ -51,7 +52,7 @@ export const fallbackContent: SiteContent = {
     { question: "אני מתחיל. אני אעמוד בקצב?", answer: "המסלול בנוי לרוכבים מתחילים-בינוניים שכבר רוכבים פעם־פעמיים בשבוע." },
     {
       question: "אני לא מכיר אף אחד. זה מוזר לבוא לבד?",
-      answer: "רוב הקהילה מכירה את יואב מהאינסטגרם, והיום מתחיל בהיכרות.",
+      answer: "רובם מגיעים מהאינסטגרם. מתחילים בהיכרות על האופניים.",
     },
     { question: "מה להביא?", answer: "קסדה היא חובה." },
     {

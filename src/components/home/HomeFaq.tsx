@@ -37,7 +37,7 @@ export function HomeFaq({ items }: { items: FaqItem[] }) {
                   href={`#faq-item-${index}`}
                   className="rounded-2xl border border-charcoal/8 bg-cream/80 p-4 shadow-[0_12px_40px_-28px_rgba(31,33,28,0.4)] transition-[border-color,transform] duration-[var(--motion-fast)] hover:border-olive/40 hover:-translate-y-0.5"
                 >
-                  <span className="text-micro font-bold text-sunset">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="text-micro font-bold text-olive-deep">{String(index + 1).padStart(2, "0")}</span>
                   <span className="mt-2 block text-small font-semibold text-charcoal">{item.question}</span>
                 </a>
               ))}

@@ -30,7 +30,7 @@ export function Numbers({ event }: { event: EventContent }) {
         <TiltIn className="mx-auto max-w-[68rem] will-change-transform">
           <div className="rounded-[2rem] bg-cream/92 p-2.5 shadow-[0_50px_100px_-30px_rgba(31,33,28,0.35)] ring-1 ring-charcoal/10 backdrop-blur-md md:p-3.5">
             <div className="overflow-hidden rounded-[1.5rem] border border-charcoal/8 bg-gradient-to-b from-white/80 to-cream/90 text-charcoal">
-              <div className="flex items-center justify-between border-b border-charcoal/8 px-5 py-3 text-micro font-semibold tracking-wide text-charcoal/55 md:px-7">
+              <div className="flex items-center justify-between border-b border-charcoal/8 px-5 py-3 text-micro font-semibold tracking-wide text-charcoal-soft md:px-7">
                 <span className="flex items-center gap-2">
                   <span className="relative flex size-2.5">
                     <span className="absolute inset-0 animate-ping rounded-full bg-sunset/70 motion-reduce:hidden" />
@@ -54,12 +54,12 @@ export function Numbers({ event }: { event: EventContent }) {
                     key={field.title}
                     className={`flex flex-col px-5 py-7 md:px-7 md:py-10 ${i % 2 === 0 ? "border-e border-charcoal/8" : ""} ${i < 2 ? "border-b border-charcoal/8 md:border-b-0" : ""} ${i === 1 ? "md:border-e" : ""}`}
                   >
-                    <dt className="text-micro font-semibold tracking-[0.18em] text-charcoal/45">{field.title}</dt>
+                    <dt className="text-micro font-semibold tracking-[0.18em] text-charcoal-soft">{field.title}</dt>
                     <dd className="mt-3 flex items-baseline gap-2">
                       <Odometer value={field.value} className="font-sans text-[clamp(3rem,2rem+4vw,5.5rem)] font-black tracking-tight text-charcoal" />
-                      <span className="text-small font-bold text-sunset">{field.unit}</span>
+                      <span className="text-small font-bold text-olive-deep">{field.unit}</span>
                     </dd>
-                    <dd className="mt-2 text-small text-charcoal/60">{field.note}</dd>
+                    <dd className="mt-2 text-small text-charcoal-soft">{field.note}</dd>
                   </div>
                 ))}
               </dl>

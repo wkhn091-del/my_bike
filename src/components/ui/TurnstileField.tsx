@@ -37,7 +37,7 @@ function loadTurnstile(): Promise<TurnstileApi> {
 
 type Props = {
   siteKey: string | null;
-  action: "checkout" | "coaching" | "waitlist" | "feedback";
+  action: "checkout" | "coaching" | "waitlist" | "feedback" | "details" | "consent";
   /** Changes after every server response: a token is single-use, so the widget must issue a new one. */
   resetSignal?: unknown;
 };

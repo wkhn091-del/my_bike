@@ -3,7 +3,9 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { detailsAction, type DetailsState } from "@/app/thank-you/[token]/actions";
 import { FieldError, focusFirstError } from "@/components/forms/FieldError";
+import { FormPrivacyNote } from "@/components/forms/FormPrivacyNote";
 import { useSubmit } from "@/components/forms/useSubmit";
+import { TurnstileField } from "@/components/ui/TurnstileField";
 import { ageOn } from "@/lib/format";
 
 export type ParticipantDefaults = {
@@ -21,6 +23,7 @@ type Props = {
   eventDate: string;
   bikeType: string;
   participants: ParticipantDefaults[];
+  turnstileKey: string | null;
 };
 
 /** Server keys look like "participants.1.birthDate"; inputs are named "p2_birthDate". */
@@ -42,7 +45,16 @@ function RiderFields({ index, defaults, eventDate, errors }: { index: number; de
         <label htmlFor={`p${n}_fullName`} className="field-label">
           שם מלא
         </label>
-        <input id={`p${n}_fullName`} name={`p${n}_fullName`} defaultValue={defaults.fullName} autoComplete={index === 0 ? "name" : "off"} maxLength={80} className="field-input" aria-invalid={Boolean(error("fullName"))} />
+        <input
+          id={`p${n}_fullName`}
+          name={`p${n}_fullName`}
+          defaultValue={defaults.fullName}
+          autoComplete={index === 0 ? "name" : "off"}
+          maxLength={80}
+          className="field-input"
+          aria-invalid={Boolean(error("fullName"))}
+          aria-describedby={error("fullName") ? `p${n}_fullName-error` : undefined}
+        />
         <FieldError id={`p${n}_fullName-error`} message={error("fullName")} />
       </div>
       {index > 0 ? (
@@ -50,7 +62,18 @@ function RiderFields({ index, defaults, eventDate, errors }: { index: number; de
           <label htmlFor={`p${n}_phone`} className="field-label">
             טלפון נייד
           </label>
-          <input id={`p${n}_phone`} name={`p${n}_phone`} type="tel" inputMode="tel" dir="ltr" defaultValue={defaults.phone} maxLength={20} className="field-input text-end" aria-invalid={Boolean(error("phone"))} />
+          <input
+            id={`p${n}_phone`}
+            name={`p${n}_phone`}
+            type="tel"
+            inputMode="tel"
+            dir="ltr"
+            defaultValue={defaults.phone}
+            maxLength={20}
+            className="field-input text-end"
+            aria-invalid={Boolean(error("phone"))}
+            aria-describedby={error("phone") ? `p${n}_phone-error` : undefined}
+          />
           <FieldError id={`p${n}_phone-error`} message={error("phone")} />
         </div>
       ) : (
@@ -68,13 +91,14 @@ function RiderFields({ index, defaults, eventDate, errors }: { index: number; de
           onChange={(event) => setBirthDate(event.target.value)}
           className="field-input"
           aria-invalid={Boolean(error("birthDate"))}
+          aria-describedby={error("birthDate") ? `p${n}_birthDate-error` : undefined}
         />
         <p className="field-hint">ההשתתפות מגיל 16. מתחת ל-18 צריך אישור הורה.</p>
         <FieldError id={`p${n}_birthDate-error`} message={error("birthDate")} />
       </div>
       {minor ? (
         <div className="fade-up grid gap-4 rounded-md bg-cream-deep p-4">
-          <p className="font-semibold">רוכב/ת מתחת לגיל 18: נשלח להורה קישור לאישור. בלי אישור הורה לא ניתן להשתתף.</p>
+          <p className="font-semibold">רוכב/ת מתחת לגיל 18: נשלח להורה קישור לאישור. בלי אישור הורה לא ניתן להשתתף. מייל ההורה חייב להיות שונה ממייל ההזמנה.</p>
           <div data-field>
             <label htmlFor={`p${n}_parentName`} className="field-label">
               שם ההורה
@@ -85,14 +109,36 @@ function RiderFields({ index, defaults, eventDate, errors }: { index: number; de
             <label htmlFor={`p${n}_parentPhone`} className="field-label">
               טלפון ההורה
             </label>
-            <input id={`p${n}_parentPhone`} name={`p${n}_parentPhone`} type="tel" inputMode="tel" dir="ltr" defaultValue={defaults.parentPhone} maxLength={20} className="field-input text-end" aria-invalid={Boolean(error("parentPhone"))} />
+            <input
+              id={`p${n}_parentPhone`}
+              name={`p${n}_parentPhone`}
+              type="tel"
+              inputMode="tel"
+              dir="ltr"
+              defaultValue={defaults.parentPhone}
+              maxLength={20}
+              className="field-input text-end"
+              aria-invalid={Boolean(error("parentPhone"))}
+              aria-describedby={error("parentPhone") ? `p${n}_parentPhone-error` : undefined}
+            />
             <FieldError id={`p${n}_parentPhone-error`} message={error("parentPhone")} />
           </div>
           <div data-field>
             <label htmlFor={`p${n}_parentEmail`} className="field-label">
               מייל ההורה
             </label>
-            <input id={`p${n}_parentEmail`} name={`p${n}_parentEmail`} type="email" inputMode="email" dir="ltr" defaultValue={defaults.parentEmail} maxLength={120} className="field-input text-end" aria-invalid={Boolean(error("parentEmail"))} />
+            <input
+              id={`p${n}_parentEmail`}
+              name={`p${n}_parentEmail`}
+              type="email"
+              inputMode="email"
+              dir="ltr"
+              defaultValue={defaults.parentEmail}
+              maxLength={120}
+              className="field-input text-end"
+              aria-invalid={Boolean(error("parentEmail"))}
+              aria-describedby={error("parentEmail") ? `p${n}_parentEmail-error` : undefined}
+            />
             <FieldError id={`p${n}_parentEmail-error`} message={error("parentEmail")} />
           </div>
         </div>
@@ -101,7 +147,7 @@ function RiderFields({ index, defaults, eventDate, errors }: { index: number; de
   );
 }
 
-export function DetailsForm({ token, quantity, eventDate, bikeType, participants }: Props) {
+export function DetailsForm({ token, quantity, eventDate, bikeType, participants, turnstileKey }: Props) {
   const [state, action, pending] = useActionState<DetailsState, FormData>(detailsAction, { status: "idle" });
   const formRef = useRef<HTMLFormElement>(null);
   const onSubmit = useSubmit(action);
@@ -132,7 +178,16 @@ export function DetailsForm({ token, quantity, eventDate, bikeType, participants
         <label htmlFor="bikeType" className="field-label">
           על אילו אופניים תגיעו?
         </label>
-        <input id="bikeType" name="bikeType" defaultValue={bikeType} maxLength={60} placeholder="כביש / גראבל / שטח" className="field-input" aria-invalid={Boolean(errors.bikeType)} />
+        <input
+          id="bikeType"
+          name="bikeType"
+          defaultValue={bikeType}
+          maxLength={60}
+          placeholder="כביש / גראבל / שטח"
+          className="field-input"
+          aria-invalid={Boolean(errors.bikeType)}
+          aria-describedby={errors.bikeType ? "bikeType-error" : undefined}
+        />
         <FieldError id="bikeType-error" message={errors.bikeType} />
       </div>
       {Array.from({ length: quantity }, (_, index) => (
@@ -144,14 +199,18 @@ export function DetailsForm({ token, quantity, eventDate, bikeType, participants
           defaults={participants[index] ?? { fullName: "", phone: "", birthDate: "", parentName: "", parentPhone: "", parentEmail: "" }}
         />
       ))}
+      <TurnstileField siteKey={turnstileKey} action="details" resetSignal={state} />
       {state.status === "error" ? (
         <p role="alert" className="field-error">
           {state.message}
         </p>
       ) : null}
-      <button type="submit" className="btn-secondary min-h-14 w-full text-body" disabled={pending}>
-        {pending ? "שומרים..." : "לשמירת הפרטים"}
-      </button>
+      <div>
+        <button type="submit" className="btn-secondary min-h-14 w-full text-body" disabled={pending}>
+          {pending ? "שומרים..." : "לשמירת הפרטים"}
+        </button>
+        <FormPrivacyNote />
+      </div>
     </form>
   );
 }

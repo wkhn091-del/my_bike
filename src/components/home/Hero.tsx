@@ -33,9 +33,8 @@ function ArchCard({ card }: { card: HeroCard }) {
           className={`object-cover ${card.focus}`}
           placeholder="empty"
         />
-        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-1 bg-gradient-to-t from-charcoal via-charcoal/80 to-transparent px-2 pb-2 pt-10">
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-charcoal via-charcoal/80 to-transparent px-2 pb-2.5 pt-10">
           <p className="text-center text-[0.65rem] font-bold leading-tight text-cream">{card.title}</p>
-          <span className="inline-flex rounded-full bg-cream px-2.5 py-0.5 text-[0.52rem] font-semibold text-charcoal">לפרטים</span>
         </div>
       </div>
     </div>
@@ -117,7 +116,7 @@ export function Hero({ event, availability, open, proof }: Props) {
             className="hero-in mt-2.5 text-[0.75rem] font-semibold tracking-wide text-cream/80 sm:mt-3 sm:text-[0.78rem]"
             style={{ "--d": "100ms" } as CSSProperties}
           >
-            {event.title} · {formatWeekday(event.date)} <bdi>{formatDayMonth(event.date)}</bdi> · {place}
+            {formatWeekday(event.date)} <bdi>{formatDayMonth(event.date)}</bdi> · {place}
           </p>
 
           <h1
@@ -128,16 +127,16 @@ export function Hero({ event, availability, open, proof }: Props) {
               <span style={{ "--i": 0 } as CSSProperties}>די לרכוב לבד</span>
             </span>{" "}
             <span className="hero-line">
-              <span style={{ "--i": 1 } as CSSProperties}>באותו מסלול</span>
+              <span style={{ "--i": 1 } as CSSProperties}>{place}</span>
             </span>
           </h1>
 
           <p
-            className="hero-in mt-2.5 max-w-[34ch] text-[0.88rem] leading-snug text-cream/90 sm:mt-3 sm:max-w-md sm:text-[0.95rem] sm:leading-relaxed md:mt-4 md:max-w-xl md:text-lead"
+            className="hero-in mt-2.5 max-w-[34ch] text-[0.88rem] leading-snug text-cream/90 sm:mt-3 sm:max-w-md sm:text-[0.95rem] sm:leading-relaxed md:mt-4 md:max-w-lg md:text-lead"
             style={{ "--d": "550ms" } as CSSProperties}
           >
-            {formatWeekday(event.date)} אחד {place} עם <bdi>{event.capacity}</bdi> רוכבים בקצב שלכם: מסלול מודרך, ארוחות,
-            סדנת טכניקה וצלם. <bdi className="font-bold text-cream">{formatShekels(event.priceAgorot)}</bdi>, הכול כלול.
+            <bdi className="font-bold text-cream">{formatShekels(event.priceAgorot)}</bdi> הכול כלול ·{" "}
+            <bdi>{event.capacity}</bdi> רוכבים בלי להישאר מאחור · מדריך, אוכל וצלם
           </p>
 
           {open && event.early && earlyLeft > 0 ? (
@@ -157,7 +156,11 @@ export function Hero({ event, availability, open, proof }: Props) {
                 location="hero"
                 className="btn-primary w-full min-h-11 touch-manipulation px-5 text-[0.95rem] sm:min-h-12 sm:px-6 sm:text-base md:min-h-14 md:w-auto md:px-9 md:text-lead"
               >
-                {soldOut ? "לרשימת ההמתנה" : open ? `שמרו לי מקום ${place}` : "לעדכון כשההרשמה נפתחת"}
+                {soldOut
+                  ? "לרשימת ההמתנה"
+                  : open
+                    ? `שמרו מקום · ${formatShekels(event.priceAgorot)}`
+                    : `רשמו אותי לפתיחה · ${event.capacity} בלבד`}
               </CtaLink>
             </Magnetic>
             <p className="mt-2 flex items-start justify-center gap-2 text-[0.72rem] leading-snug text-cream/80 sm:mt-2.5 sm:text-[0.78rem] md:justify-start md:text-micro">
@@ -173,7 +176,7 @@ export function Hero({ event, availability, open, proof }: Props) {
                   </>
                 ) : (
                   <>
-                    <bdi>{event.capacity}</bdi> מקומות בלבד · ההרשמה נפתחת בקרוב
+                    <bdi>{event.capacity}</bdi> מקומות בלבד · בלי התחייבות עד שנפתח
                   </>
                 )}
               </span>

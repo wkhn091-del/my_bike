@@ -79,7 +79,7 @@ export function SeatsWall({ capacity, taken, named, open }: Props) {
               <span ref={counterRef} className="text-[clamp(3.5rem,2.5rem+5vw,7rem)]" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {filled}
               </span>
-              <span className="text-[clamp(1.6rem,1.2rem+2vw,2.75rem)] text-cream/40">/{capacity}</span>
+              <span className="text-[clamp(1.6rem,1.2rem+2vw,2.75rem)] text-cream/70">/{capacity}</span>
             </bdi>
           </p>
           <div
@@ -88,6 +88,7 @@ export function SeatsWall({ capacity, taken, named, open }: Props) {
             aria-valuemin={0}
             aria-valuemax={capacity}
             aria-valuenow={filled}
+            aria-valuetext={`${filled} מתוך ${capacity} מקומות`}
             aria-label="מקומות שנתפסו"
           >
             <div
@@ -142,7 +143,7 @@ export function SeatsWall({ capacity, taken, named, open }: Props) {
         <div className="hidden rounded-[1.5rem] border border-dashed border-cream/15 p-5 lg:block md:p-6">
           <p className="text-micro font-semibold tracking-[0.16em] text-cream/50">מה מחכה בשטח</p>
           <ul className="mt-3 space-y-2 text-small text-cream/75">
-            <li>מסלול מודרך בקצב שלכם</li>
+            <li>מסלול מודרך בלי לרדוף</li>
             <li>ארוחות לאורך היום</li>
             <li>סדנת טכניקה + צלם</li>
           </ul>

@@ -3,11 +3,25 @@
 import { useRef } from "react";
 import { gsap, prefersReducedMotion, useGSAP } from "./gsap";
 
+type TagName = "p" | "blockquote" | "h2";
+
 /**
  * A statement that lights up word by word as the visitor scrolls through it. Words, never letters,
  * so Hebrew shaping is untouched. The full text is always in the DOM; reduced motion shows it lit.
  */
-export function ScrollWords({ text, as: Tag = "p", className, dim = 0.16 }: { text: string; as?: "p" | "blockquote"; className?: string; dim?: number }) {
+export function ScrollWords({
+  text,
+  as: Tag = "p",
+  id,
+  className,
+  dim = 0.16,
+}: {
+  text: string;
+  as?: TagName;
+  id?: string;
+  className?: string;
+  dim?: number;
+}) {
   const ref = useRef<HTMLElement>(null);
   const setRef = (node: HTMLElement | null) => {
     ref.current = node;
@@ -33,7 +47,7 @@ export function ScrollWords({ text, as: Tag = "p", className, dim = 0.16 }: { te
 
   const words = text.split(/\s+/).filter(Boolean);
   return (
-    <Tag ref={setRef} className={className}>
+    <Tag ref={setRef} id={id} className={className}>
       {words.map((word, index) => (
         <span key={`${index}-${word}`} data-word="">
           {word}

@@ -35,7 +35,7 @@ export function Closing({ event, availability, open }: { event: EventContent; av
           )}
         </SplitReveal>
         <p className="mx-auto mt-4 text-lead measure">
-          <bdi>{formatShortDate(event.date)}</bdi> {inPlace(event.region)}. רכיבה, אוכל, סדנת טכניקה וחבורה בקצב שלכם.
+          <bdi>{formatShortDate(event.date)}</bdi> {inPlace(event.region)}. רכיבה, אוכל, סדנת טכניקה וחבורה שלא בורחת קדימה.
         </p>
         <div className="mt-10">
           <Magnetic className="w-full sm:w-auto">

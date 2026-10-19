@@ -41,7 +41,25 @@
   --radius-md: 12px;
   --radius-lg: 20px;
 
-  --shadow-soft: 0 4px 24px rgb(31 33 28 / 0.08);
+  --shadow-contact:
+    0 1px 1px rgb(31 33 28 / 0.04),
+    0 2px 4px rgb(31 33 28 / 0.04),
+    0 8px 16px rgb(31 33 28 / 0.06),
+    0 24px 48px rgb(31 33 28 / 0.08);
+  --shadow-lift:
+    0 2px 2px rgb(31 33 28 / 0.05),
+    0 8px 16px rgb(31 33 28 / 0.07),
+    0 28px 56px rgb(31 33 28 / 0.12);
+  --shadow-node:
+    0 1px 0 rgb(255 255 255 / 0.12) inset,
+    0 2px 4px rgb(0 0 0 / 0.25),
+    0 12px 28px rgb(0 0 0 / 0.35);
+  /* Existing `shadow-soft` utility ? same stack as contact */
+  --shadow-soft:
+    0 1px 1px rgb(31 33 28 / 0.04),
+    0 2px 4px rgb(31 33 28 / 0.04),
+    0 8px 16px rgb(31 33 28 / 0.06),
+    0 24px 48px rgb(31 33 28 / 0.08);
 
   --ease-soft-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-soft-in: cubic-bezier(0.7, 0, 0.84, 0);
@@ -168,11 +186,13 @@
     font-size: var(--text-body);
     text-align: center;
     transition:
-      background-color var(--motion-instant) linear,
-      transform var(--motion-fast) var(--ease-soft-out);
+      background-color 220ms var(--ease-touch),
+      transform 220ms var(--ease-touch),
+      box-shadow 280ms var(--ease-soft-out);
   }
   .btn-primary:hover {
     background: var(--color-sunset-hover);
+    box-shadow: var(--shadow-lift);
   }
   .btn-primary:active {
     transform: scale(0.97);
@@ -706,6 +726,7 @@ html.has-custom-cursor :is(input, textarea, select, [contenteditable]) {
 
 /* RideRoadmap — scroll-pinned path + glowing checkpoints */
 .roadmap-node {
+  box-shadow: var(--shadow-node);
   transition:
     border-color 0.35s var(--ease-soft-out),
     color 0.35s var(--ease-soft-out),
@@ -718,9 +739,10 @@ html.has-custom-cursor :is(input, textarea, select, [contenteditable]) {
   color: #fff;
   background: rgb(224 122 46 / 0.2);
   box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.14) inset,
     0 0 0 1px rgb(224 122 46 / 0.28),
     0 0 28px 4px rgb(224 122 46 / 0.32),
-    0 12px 40px rgb(0 0 0 / 0.5);
+    0 12px 28px rgb(0 0 0 / 0.4);
 }
 .roadmap-node-glow {
   opacity: 0;

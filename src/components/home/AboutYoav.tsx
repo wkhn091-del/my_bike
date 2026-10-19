@@ -18,11 +18,10 @@ export function AboutYoav({ content }: { content: SiteContent }) {
     <section aria-labelledby="yoav-title" className="section relative overflow-hidden bg-olive-deep text-cream">
       <div className={`container-x relative grid items-center gap-12 ${event.yoavImages.length ? "md:grid-cols-[1.3fr_1fr]" : ""}`}>
         <div>
-          <h2 id="yoav-title" className="text-micro font-semibold tracking-wide font-sans text-cream/70">
-            מי מוביל את היום
-          </h2>
+          <p className="text-micro font-semibold tracking-wide font-sans text-cream/70">מי מוביל את היום</p>
           <ScrollWords
-            as="blockquote"
+            as="h2"
+            id="yoav-title"
             dim={0.22}
             className="mt-6 max-w-4xl font-display text-statement"
             text={`״ב${event.title} אני לא מסתכל מהצד. אני רוכב איתכם כל המסלול, מהקילומטר הראשון ועד האחרון.״`}

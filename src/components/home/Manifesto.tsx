@@ -7,10 +7,10 @@ export function Manifesto({ event }: { event: EventContent }) {
   return (
     <section aria-label="למה יום הקהילה" className="section relative overflow-hidden">
       <div className="container-x">
-        <p className="text-micro font-semibold tracking-wide text-olive">מכירים את זה?</p>
+        <p className="text-micro font-semibold tracking-wide text-olive">אתם מכירים את הרכיבה הזו.</p>
         <ScrollWords
           className="mt-6 max-w-5xl font-display text-statement text-charcoal"
-          text={`אותו מסלול, אותה שעה, לבד. לא בטוחים שתעמדו בקצב של קבוצה, ולא יודעים לאן להמשיך מכאן. ${event.title} בשביל מי שרוכב לבד ומחפש קבוצה בקצב שלו: יום אחד ${inPlace(event.region)}, עם רוכבים בקצב שלכם, ומדריך שרוכב איתכם כל הדרך.`}
+          text={`אותו מסלול, אותה שעה, לבד. לא בטוחים שתעמדו בקצב של קבוצה, ולא יודעים לאן להמשיך מכאן. ${event.title} בשביל מי שרוכב לבד ומחפש קבוצה שלא בורחת קדימה: יום אחד ${inPlace(event.region)}, יואב רוכב איתכם עד הסוף.`}
         />
       </div>
     </section>

@@ -24,11 +24,19 @@ import { createSignedToken, verifySignedToken } from "@/lib/security/signed-toke
 import type { CheckoutInput } from "@/lib/validation/forms";
 import type { QuoteView } from "./types";
 
-/** Thank-you links live until a week after the event. */
-const ORDER_TOKEN_TTL = 60 * 60 * 24 * 120;
+const DAY = 60 * 60 * 24;
+/** Capability-URL window: at least a week, at most 45 days, or a week past the event — whichever is sooner of the caps. */
+const ORDER_TOKEN_TTL_MIN = DAY * 7;
+const ORDER_TOKEN_TTL_MAX = DAY * 45;
 
 export function pricingConfig(event: EventContent): PricingConfig {
   return { regularAgorot: event.priceAgorot, early: event.early, friendDiscountAgorot: event.friendDiscountAgorot };
+}
+
+function orderTokenTtlSeconds(eventDate: string): number {
+  const until = new Date(`${eventDate}T23:59:59+02:00`).getTime() + DAY * 7 * 1000;
+  const fromEvent = Math.floor((until - Date.now()) / 1000);
+  return Math.min(ORDER_TOKEN_TTL_MAX, Math.max(ORDER_TOKEN_TTL_MIN, fromEvent));
 }
 
 export type PublicAvailability = { seatsLeft: number; earlySeatsLeft: number; taken: number; live: boolean };
@@ -82,8 +90,9 @@ export async function buildQuote(quantity: number, couponCode: string, retryOrde
   };
 }
 
-export function orderToken(orderId: string): string {
-  return createSignedToken("order", orderId, ORDER_TOKEN_TTL, tokenSecret);
+export function orderToken(orderId: string, eventDate?: string): string {
+  const ttl = eventDate ? orderTokenTtlSeconds(eventDate) : ORDER_TOKEN_TTL_MAX;
+  return createSignedToken("order", orderId, ttl, tokenSecret);
 }
 
 export function readOrderToken(token: string): string | null {
@@ -148,10 +157,16 @@ export async function startCheckout(input: CheckoutInput): Promise<StartResult> 
 
   if (held.kind !== "held") return held;
 
-  const token = orderToken(orderId);
+  const token = orderToken(orderId, event.date);
   const thankYouUrl = `${siteUrl}/thank-you/${token}`;
 
   if (serverEnv.PAYMENTS_MODE === "mock") {
+    // Defense in depth: env schema already forbids DEMO_PUBLIC+DATABASE_URL.
+    if (process.env.DEMO_PUBLIC === "1" || serverEnv.VERCEL_ENV === "production") {
+      reportError("mock-checkout-blocked", new Error("Mock checkout refused outside local/dev"));
+      await withSeatLock((client) => cancelHeldOrder(client, orderId)).catch((cancelError) => reportError("cancel-hold", cancelError));
+      return { kind: "failed" };
+    }
     await confirmOrder(orderId, held.quote.totalAgorot, null);
     return { kind: "redirect", url: thankYouUrl };
   }
@@ -192,7 +207,7 @@ async function confirmOrder(orderId: string, paidAgorot: number, transactionId: 
     after(async () => {
       const { event, settings } = await getSiteContent();
       await Promise.all([
-        sendOrderConfirmation(paid, event, settings, `${siteUrl}/thank-you/${orderToken(paid.id)}`),
+        sendOrderConfirmation(paid, event, settings, `${siteUrl}/thank-you/${orderToken(paid.id, event.date)}`),
         notifyOrderPaid(paid, { heldExpired: result.heldExpired }),
         appendRow("הזמנות", [
           new Date().toISOString(),

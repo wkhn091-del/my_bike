@@ -71,7 +71,11 @@ export function TypeGate({ word, hint, media, children }: { word: string; hint: 
   } as const;
 
   return (
-    <div ref={ref} className="relative h-[100svh] min-h-[560px] overflow-hidden bg-charcoal">
+    <div
+      ref={ref}
+      className="relative h-[100svh] min-h-[560px] overflow-hidden bg-charcoal"
+      aria-label={`${word} — ${hint} להמשך`}
+    >
       <div data-gate-media="" className="absolute inset-0 will-change-transform">
         {media}
       </div>
@@ -100,6 +104,7 @@ export function TypeGate({ word, hint, media, children }: { word: string; hint: 
       <p data-gate-hint="" aria-hidden="true" className="invisible absolute inset-x-0 bottom-[20%] text-center text-micro font-semibold tracking-[0.3em] text-cream/75">
         {hint}
       </p>
+      <p className="sr-only">{hint} להמשך התוכן</p>
 
       <div data-gate-content="" className="absolute inset-x-0 bottom-0">
         {children}

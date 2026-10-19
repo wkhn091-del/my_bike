@@ -116,7 +116,14 @@ export default async function ThankYouPage({ params }: PageProps<"/thank-you/[to
               השלמת פרטים
             </h2>
             <p className="mt-2 mb-8 text-charcoal-soft">סוג אופניים ופרטי הרוכבים. לוקח דקה.</p>
-            <DetailsForm token={token} quantity={order.quantity} eventDate={event.date} bikeType={order.bike_type ?? ""} participants={defaults} />
+            <DetailsForm
+              token={token}
+              quantity={order.quantity}
+              eventDate={event.date}
+              bikeType={order.bike_type ?? ""}
+              participants={defaults}
+              turnstileKey={turnstileSiteKey()}
+            />
           </div>
         </section>
 

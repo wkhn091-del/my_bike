@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { confirmFromCardcom } from "@/lib/checkout/service";
+import { getOrderByLowProfileId } from "@/lib/db/orders";
 import { reportError } from "@/lib/observability/report";
 import { LOW_PROFILE_ID } from "@/lib/payments/cardcom";
 import { hashKey, rateLimit } from "@/lib/security/rate-limit";
@@ -28,7 +29,7 @@ function extractLowProfileId(raw: string, contentType: string, url: URL): string
 
 export async function POST(request: Request) {
   const ip = request.headers.get("x-real-ip") || request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (!(await rateLimit(`webhook:ip:${await hashKey(ip)}`, 120, 60_000))) {
+  if (!(await rateLimit(`webhook:ip:${await hashKey(ip)}`, 30, 60_000))) {
     return new NextResponse(null, { status: 429 });
   }
 
@@ -37,6 +38,10 @@ export async function POST(request: Request) {
 
   const lowProfileId = extractLowProfileId(raw, request.headers.get("content-type") ?? "", new URL(request.url));
   if (!lowProfileId) return NextResponse.json({ ok: true });
+
+  // Only call Cardcom for LowProfileIds we issued — blocks credential/API abuse via random UUIDs.
+  const known = await getOrderByLowProfileId(lowProfileId);
+  if (!known) return NextResponse.json({ ok: true });
 
   try {
     await confirmFromCardcom(lowProfileId);

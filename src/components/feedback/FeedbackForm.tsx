@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { feedbackAction, type FeedbackState } from "@/app/feedback/[token]/actions";
 import { FieldError, focusFirstError } from "@/components/forms/FieldError";
+import { FormPrivacyNote } from "@/components/forms/FormPrivacyNote";
 import { useSubmit } from "@/components/forms/useSubmit";
 import { TurnstileField } from "@/components/ui/TurnstileField";
 import { FEEDBACK_MAX } from "@/lib/validation/forms";
@@ -111,9 +112,12 @@ export function FeedbackForm({ token, turnstileKey }: { token: string; turnstile
           {state.message}
         </p>
       ) : null}
-      <button type="submit" className="btn-primary w-full" disabled={pending}>
-        {pending ? "שולחים..." : "לשליחת המשוב"}
-      </button>
+      <div>
+        <button type="submit" className="btn-primary w-full" disabled={pending}>
+          {pending ? "שולחים..." : "לשליחת המשוב"}
+        </button>
+        <FormPrivacyNote />
+      </div>
     </form>
   );
 }

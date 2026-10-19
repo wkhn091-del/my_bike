@@ -36,12 +36,15 @@ function serialize(directives: Directives): string {
 export function buildSiteCsp(nonce: string, isDev: boolean, studioOrigin?: string): string {
   return serialize({
     "default-src": ["'self'"],
-    // 'strict-dynamic' lets our nonced bundle inject gtag, the Meta pixel and Clarity after consent.
+    // 'strict-dynamic' + nonce: modern browsers ignore host allowlists; hosts below cover legacy UAs.
     "script-src": [
       "'self'",
       `'nonce-${nonce}'`,
       "'strict-dynamic'",
-      "https:",
+      TURNSTILE,
+      "https://www.googletagmanager.com",
+      "https://connect.facebook.net",
+      "https://*.clarity.ms",
       ...(isDev ? ["'unsafe-eval'"] : []),
     ],
     "style-src": ["'self'", `'nonce-${nonce}'`],

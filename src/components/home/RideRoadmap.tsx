@@ -213,9 +213,18 @@ export function RideRoadmap({ gallery = [] }: { gallery?: SiteImage[] }) {
               if (i <= next) node.setAttribute("data-active", "true");
               else node.removeAttribute("data-active");
             });
-            tabs.forEach((tab, i) => tab.setAttribute("data-active", i === next ? "true" : "false"));
+            tabs.forEach((tab, i) => {
+              const on = i === next;
+              tab.setAttribute("data-active", on ? "true" : "false");
+              tab.setAttribute("aria-selected", on ? "true" : "false");
+            });
             gsap.killTweensOf([...panels, ...bgs]);
-            panels.forEach((panel, i) => panel.setAttribute("aria-hidden", i === next ? "false" : "true"));
+            panels.forEach((panel, i) => {
+              const active = i === next;
+              panel.setAttribute("aria-hidden", active ? "false" : "true");
+              if (active) panel.removeAttribute("inert");
+              else panel.setAttribute("inert", "");
+            });
 
             if (bgs[prev]) gsap.to(bgs[prev]!, { autoAlpha: 0, duration: 0.3, ease: "power2.inOut", overwrite: true });
             if (bgs[next]) gsap.to(bgs[next]!, { autoAlpha: 1, duration: 0.3, ease: "power2.inOut", overwrite: true });
@@ -308,15 +317,17 @@ export function RideRoadmap({ gallery = [] }: { gallery?: SiteImage[] }) {
         {/* UI locked over the full-bleed photo */}
         <div className="relative z-10 flex h-[100svh] min-h-[100svh] flex-col justify-between px-4 pb-3 pt-[calc(var(--header-h)+0.5rem)] md:px-10 md:pb-4 md:pt-[calc(var(--header-h)+1rem)]">
             <div className="mx-auto w-full max-w-4xl shrink-0">
-              <div className="hidden flex-wrap justify-between gap-x-4 gap-y-1 text-micro font-semibold text-cream/45 md:flex">
+              <div className="hidden flex-wrap justify-between gap-x-4 gap-y-1 text-micro font-semibold text-cream/70 md:flex" role="tablist" aria-label="שלבי היום">
                 {STAGES.map((stage, index) => (
                   <button
                     key={stage.id}
                     type="button"
+                    role="tab"
                     data-tab=""
                     data-index={index}
                     data-active={index === 0 ? "true" : "false"}
-                    className="roadmap-tab shrink-0 pb-1 text-cream/45 transition-colors data-[active=true]:text-cream data-[active=true]:shadow-[inset_0_-2px_0_0_rgb(244_237_224/0.85)]"
+                    aria-selected={index === 0}
+                    className="roadmap-tab shrink-0 pb-1 text-cream/70 transition-colors data-[active=true]:text-cream data-[active=true]:shadow-[inset_0_-2px_0_0_rgb(244_237_224/0.85)]"
                   >
                     {stage.label}
                   </button>
@@ -336,8 +347,10 @@ export function RideRoadmap({ gallery = [] }: { gallery?: SiteImage[] }) {
                   <div
                     key={stage.id}
                     data-panel=""
+                    role="tabpanel"
                     className={`absolute inset-x-0 top-0 ${index === 0 ? "" : "invisible opacity-0"}`}
                     aria-hidden={index === 0 ? undefined : true}
+                    {...(index === 0 ? {} : { inert: true })}
                   >
                     <p className="text-[0.65rem] font-semibold tracking-wide text-sunset md:text-micro">
                       {stage.id} · {stage.label}
@@ -400,7 +413,7 @@ export function RideRoadmap({ gallery = [] }: { gallery?: SiteImage[] }) {
                   data-node=""
                   data-index={index}
                   aria-label={`${stage.id} ${stage.label}`}
-                  className="roadmap-node absolute left-0 top-0 z-10 flex size-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[0.85rem] border border-white/20 bg-charcoal/60 text-[0.75rem] font-bold tracking-wide text-cream/55 shadow-[0_8px_24px_rgb(0_0_0/0.45)] backdrop-blur-md transition hover:border-sunset/40 md:size-14 md:rounded-[1.05rem] md:text-small"
+                  className="roadmap-node absolute left-0 top-0 z-10 flex size-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[0.85rem] border border-white/20 bg-charcoal/60 text-[0.75rem] font-bold tracking-wide text-cream/55 backdrop-blur-md hover:border-sunset/40 md:size-14 md:rounded-[1.05rem] md:text-small"
                 >
                   <span className="roadmap-node-glow pointer-events-none absolute inset-0 rounded-[inherit]" />
                   <span className="relative tabular-nums">{stage.id}</span>
@@ -408,7 +421,7 @@ export function RideRoadmap({ gallery = [] }: { gallery?: SiteImage[] }) {
               ))}
             </div>
 
-            <p className="shrink-0 text-center text-[0.65rem] text-cream/45 md:text-micro">גללו או לחצו על שלב</p>
+            <p className="shrink-0 text-center text-[0.65rem] text-cream/70 md:text-micro">גללו או לחצו על שלב</p>
         </div>
       </div>
     </section>

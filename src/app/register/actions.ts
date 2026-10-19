@@ -21,7 +21,11 @@ export async function quoteAction(rawQuantity: unknown, rawCoupon: unknown, rawR
   if (!quantity.success) return { status: "closed" };
   const retryId = typeof rawRetryToken === "string" && rawRetryToken.length <= 200 ? readOrderToken(rawRetryToken) : null;
 
-  const { ip } = await requestContext();
+  const { ip, sameOrigin } = await requestContext();
+  if (!sameOrigin) {
+    reportBlocked("origin", "quote");
+    return { status: "closed" };
+  }
   if (!(await rateLimit(`quote:ip:${await hashKey(ip)}`, 60, MINUTE))) return { status: "rate_limited" };
 
   try {

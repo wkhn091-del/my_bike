@@ -7,7 +7,7 @@ const VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const TIMEOUT_MS = 5000;
 
 export const TURNSTILE_FIELD = "cf-turnstile-response";
-export type TurnstileAction = "checkout" | "coaching" | "waitlist" | "feedback";
+export type TurnstileAction = "checkout" | "coaching" | "waitlist" | "feedback" | "details" | "consent";
 
 const tokenSchema = z.string().min(1).max(2048);
 
@@ -18,13 +18,18 @@ const verifySchema = z.object({
 });
 
 /**
- * Without a secret (local development, CI) verification is skipped. Production cannot reach that
- * branch: the env schema requires TURNSTILE_SECRET_KEY when VERCEL_ENV=production.
- * Fails closed: if Cloudflare is unreachable the submission is rejected and reported.
+ * Without a secret, only local/CI may skip (NODE_ENV development|test, or TURNSTILE_BYPASS=1).
+ * Preview/production must set TURNSTILE_SECRET_KEY. Cloudflare outages fail closed.
  */
 export async function verifyTurnstile(formData: FormData, expectedAction: TurnstileAction, ip: string): Promise<boolean> {
   const secretKey = serverEnv.TURNSTILE_SECRET_KEY;
-  if (!secretKey) return true;
+  if (!secretKey) {
+    return (
+      serverEnv.NODE_ENV === "development" ||
+      serverEnv.NODE_ENV === "test" ||
+      process.env.TURNSTILE_BYPASS === "1"
+    );
+  }
 
   const token = tokenSchema.safeParse(formData.get(TURNSTILE_FIELD));
   if (!token.success) return false;

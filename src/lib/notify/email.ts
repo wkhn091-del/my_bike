@@ -106,3 +106,15 @@ export async function notifyLead(kind: "coaching" | "waitlist", fields: Record<s
     .join("<br>");
   await send(kind, serverEnv.NOTIFY_EMAIL, title, layout(`<h1 style="font-size:22px;margin:0 0 16px">${title}</h1><p>${rows}</p>`));
 }
+
+/** Staff ping when a parent consent lands — review if the signer looks off. */
+export async function notifyParentConsent(riderName: string, signedName: string, expectedParentName: string | null): Promise<void> {
+  if (!serverEnv.NOTIFY_EMAIL) return;
+  const html = layout(`
+<h1 style="font-size:22px;margin:0 0 16px">אישור הורה חדש</h1>
+<p>רוכב/ת: ${e(riderName)}<br>
+שם חתום: ${e(signedName)}<br>
+שם הורה בהזמנה: ${e(expectedParentName ?? "—")}</p>
+<p style="font-size:15px">אם השם לא נראה תואם — בדקו מול המשפחה לפני האירוע.</p>`);
+  await send("consent_notify", serverEnv.NOTIFY_EMAIL, `אישור הורה: ${riderName}`, html);
+}

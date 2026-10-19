@@ -27,7 +27,7 @@ const LEGAL_LINKS = [
 function Col({ title, links }: { title: string; links: ReadonlyArray<readonly [string, string]> }) {
   return (
     <div className="min-w-0">
-      <p className="text-[0.7rem] font-semibold tracking-[0.14em] text-cream/40 uppercase">{title}</p>
+      <p className="text-[0.7rem] font-semibold tracking-[0.14em] text-cream/70 uppercase">{title}</p>
       <ul className="mt-3 space-y-0.5 md:mt-4 md:space-y-1">
         {links.map(([href, label]) => (
           <li key={href}>
@@ -46,7 +46,11 @@ function Col({ title, links }: { title: string; links: ReadonlyArray<readonly [s
 
 /** Mobile: brand + balanced 2-column links. Desktop: 4-column premium grid. No WhatsApp. */
 export function Footer({ settings, cta }: { settings: SiteSettings; cta?: ReactNode }) {
-  const business = [settings.legalName, settings.vatNumber ? `עוסק מורשה ${settings.vatNumber}` : null, settings.address].filter(Boolean);
+  const business = [
+    settings.legalName ?? "יואב לוי",
+    settings.vatNumber ? `עוסק מורשה ${settings.vatNumber}` : "עוסק מורשה",
+    settings.address,
+  ].filter(Boolean);
   const social: Array<{ name: BrandName; href: string; label: string }> = [
     settings.instagramUrl ? { name: "instagram" as const, href: settings.instagramUrl, label: "אינסטגרם" } : null,
     settings.facebookUrl ? { name: "facebook" as const, href: settings.facebookUrl, label: "פייסבוק" } : null,
@@ -63,7 +67,7 @@ export function Footer({ settings, cta }: { settings: SiteSettings; cta?: ReactN
           {/* Brand — full width */}
           <div className="flex flex-col items-center text-center md:items-start md:text-start">
             <Logo tone="light" />
-            <p className="mt-3 max-w-sm text-[0.9rem] leading-relaxed text-cream/55">
+            <p className="mt-3 max-w-sm text-[0.9rem] leading-relaxed text-cream/70">
               רכיבות קהילה וליווי שנתי לרוכבי שטח, עם יואב לוי.
             </p>
             {social.length > 0 ? (
@@ -75,7 +79,7 @@ export function Footer({ settings, cta }: { settings: SiteSettings; cta?: ReactN
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={item.label}
-                      className="inline-flex size-9 items-center justify-center rounded-full border border-cream/12 text-cream/60 transition-colors hover:border-cream/30 hover:text-cream"
+                      className="inline-flex size-9 items-center justify-center rounded-full border border-cream/12 text-cream/70 transition-colors hover:border-cream/30 hover:text-cream"
                     >
                       <BrandIcon name={item.name} className="size-3.5" />
                     </a>
@@ -92,7 +96,7 @@ export function Footer({ settings, cta }: { settings: SiteSettings; cta?: ReactN
             <div className="min-w-0 space-y-8">
               <Col title="עוד" links={MORE_LINKS} />
               <div>
-                <p className="text-[0.7rem] font-semibold tracking-[0.14em] text-cream/40 uppercase">יצירת קשר</p>
+                <p className="text-[0.7rem] font-semibold tracking-[0.14em] text-cream/70 uppercase">יצירת קשר</p>
                 <ul className="mt-3 space-y-0.5 md:mt-4">
                   <li>
                     <a
@@ -112,20 +116,20 @@ export function Footer({ settings, cta }: { settings: SiteSettings; cta?: ReactN
                   </li>
                 </ul>
                 {settings.answeringHours ? (
-                  <p className="mt-2 text-[0.75rem] leading-relaxed text-cream/40">שעות מענה: {settings.answeringHours}</p>
+                  <p className="mt-2 text-[0.75rem] leading-relaxed text-cream/65">שעות מענה: {settings.answeringHours}</p>
                 ) : null}
               </div>
             </div>
 
             {/* Legal sits as 3rd col on desktop; on mobile merges into bottom bar */}
             <div className="col-span-2 md:col-span-1">
-              <p className="text-[0.7rem] font-semibold tracking-[0.14em] text-cream/40 uppercase">מידע משפטי</p>
+              <p className="text-[0.7rem] font-semibold tracking-[0.14em] text-cream/70 uppercase">מידע משפטי</p>
               <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-0.5 md:mt-4 md:grid-cols-1">
                 {LEGAL_LINKS.map(([href, label]) => (
                   <li key={href}>
                     <Link
                       href={href}
-                      className="inline-flex min-h-10 items-center text-[0.8rem] text-cream/55 transition-colors hover:text-cream md:text-[0.9rem] md:text-cream/70"
+                      className="inline-flex min-h-10 items-center text-[0.8rem] text-cream/70 transition-colors hover:text-cream md:text-[0.9rem]"
                     >
                       {label}
                     </Link>
@@ -135,11 +139,11 @@ export function Footer({ settings, cta }: { settings: SiteSettings; cta?: ReactN
             </div>
           </div>
 
-          <div className="mt-10 border-t border-cream/[0.08] pt-5 text-center text-[0.75rem] text-cream/35 md:mt-14 md:flex md:items-center md:justify-between md:pt-6 md:text-start">
+          <div className="mt-10 border-t border-cream/[0.08] pt-5 text-center text-[0.75rem] text-cream/65 md:mt-14 md:flex md:items-center md:justify-between md:pt-6 md:text-start">
             <p>
               © <bdi>{new Date().getFullYear()}</bdi> <bdi dir="ltr">RideWithYoav</bdi>
             </p>
-            {business.length ? <p className="mt-2 max-w-md leading-relaxed md:mt-0 md:text-end">{business.join(" · ")}</p> : null}
+            <p className="mt-2 max-w-md leading-relaxed md:mt-0 md:text-end">{business.join(" · ")}</p>
           </div>
         </div>
       </div>

@@ -120,6 +120,12 @@ export async function getOrder(id: string): Promise<OrderRow | null> {
   return rows[0] ?? null;
 }
 
+/** Used by the Cardcom webhook so unknown LowProfileIds never trigger an outbound API call. */
+export async function getOrderByLowProfileId(lowProfileId: string): Promise<OrderRow | null> {
+  const { rows } = await db().query<OrderRow>(`select * from orders where cardcom_low_profile_id = $1 limit 1`, [lowProfileId]);
+  return rows[0] ?? null;
+}
+
 export type PaidTransition = { order: OrderRow; transitioned: boolean; heldExpired: boolean };
 
 /**

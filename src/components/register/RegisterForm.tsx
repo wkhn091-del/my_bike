@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState, useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 import { checkoutAction, quoteAction } from "@/app/register/actions";
 import { FieldError, focusFirstError } from "@/components/forms/FieldError";
+import { FormPrivacyNote } from "@/components/forms/FormPrivacyNote";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 import { TurnstileField } from "@/components/ui/TurnstileField";
 import { track } from "@/lib/analytics/track";
@@ -339,7 +340,12 @@ export function RegisterForm({ initialQuote, hasFriendDiscount, turnstileKey, pr
         </label>
         <label className="check text-small">
           <input type="checkbox" name="marketing" />
-          <span>אשמח לקבל עדכונים על אירועים הבאים. אפשר להסיר בכל רגע.</span>
+          <span>
+            אני מסכים/ה לקבל דיוור מ־RideWithYoav על אירועים. הסרה בכל הודעה.{" "}
+            <Link href="/privacy" className="link">
+              מדיניות הפרטיות
+            </Link>
+          </span>
         </label>
       </div>
 
@@ -406,6 +412,7 @@ export function RegisterForm({ initialQuote, hasFriendDiscount, turnstileKey, pr
           )}
         </button>
         <p className="mt-2 text-center text-micro text-charcoal-soft">כולל מע״מ · החזר מלא עד 14 יום לפני</p>
+        <FormPrivacyNote />
       </div>
     </form>
   );
