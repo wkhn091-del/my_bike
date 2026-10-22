@@ -41,8 +41,9 @@ export default async function ConsentPage({ params }: PageProps<"/consent/[token
                 <h2 className="text-h3">מה מאשרים</h2>
                 <p>
                   השתתפות ביום רכיבה מודרך בשטח, לפי{" "}
-                  <Link href="/terms" target="_blank" className="link">
+                  <Link href="/terms" target="_blank" rel="noopener" className="link">
                     תנאי ההשתתפות
+                    <span className="sr-only"> (נפתח בחלון חדש)</span>
                   </Link>
                   . חבישת קסדה חובה לאורך כל הרכיבה.
                 </p>
@@ -54,8 +55,9 @@ export default async function ConsentPage({ params }: PageProps<"/consent/[token
                 ) : (
                   <p>
                     הנוסח המלא מופיע ב
-                    <Link href="/terms#health" target="_blank" className="link">
+                    <Link href="/terms#health" target="_blank" rel="noopener" className="link">
                       תנאי ההשתתפות
+                      <span className="sr-only"> (נפתח בחלון חדש)</span>
                     </Link>
                     .
                   </p>

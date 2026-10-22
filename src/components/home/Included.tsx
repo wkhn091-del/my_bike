@@ -20,7 +20,7 @@ export function Included({ event }: { event: EventContent }) {
     <section id="included" aria-labelledby="included-title" className="section bg-cream">
       <div className="container-x grid gap-12 md:grid-cols-[1fr_1.1fr] md:gap-20">
         <div className="md:sticky md:top-28 md:self-start">
-          <p className="text-micro font-semibold tracking-wide text-olive">מה מקבלים</p>
+          <p className="text-micro font-semibold tracking-[0.06em] text-olive-deep">מה מקבלים</p>
           <SplitReveal id="included-title" className="mt-3 text-h2">
             690 ₪. בלי הפתעות בקופה.
           </SplitReveal>

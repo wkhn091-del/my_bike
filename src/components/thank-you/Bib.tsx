@@ -114,7 +114,7 @@ export function Bib(props: Props) {
         {["top-4 start-4", "top-4 end-4", "bottom-4 start-4", "bottom-4 end-4"].map((position) => (
           <span key={position} className={`absolute size-3 rounded-full bg-olive-deep ${position}`} aria-hidden="true" />
         ))}
-        <p className="font-display text-lead text-olive">{props.eventTitle}</p>
+        <p className="font-display text-lead text-olive-deep">{props.eventTitle}</p>
         <p className="font-display text-[7rem] leading-none" aria-label={`מספר ${props.seat}`}>
           <bdi>{props.seat}</bdi>
         </p>
@@ -143,6 +143,7 @@ export function Bib(props: Props) {
         >
           <Icon name="share" className="size-5" />
           לשיתוף בוואטסאפ
+          <span className="sr-only"> (נפתח בחלון חדש)</span>
         </a>
         <a href="/api/ics" download className="btn-secondary" onClick={() => track({ name: "share", method: "calendar" })}>
           <Icon name="calendar" className="size-5" />

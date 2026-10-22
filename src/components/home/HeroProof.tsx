@@ -1,8 +1,10 @@
 import type { CSSProperties } from "react";
 import type { HeroProof as Proof } from "@/lib/content/proof";
 
-const chip =
+const chipDark =
   "inline-flex max-w-full items-center gap-2 rounded-full border border-cream/25 bg-charcoal/55 px-3 py-1.5 text-[0.78rem] font-semibold text-cream backdrop-blur-sm sm:px-3.5 sm:text-micro";
+const chipLight =
+  "inline-flex max-w-full items-center gap-2 rounded-full border border-charcoal/12 bg-cream/80 px-3 py-1.5 text-[0.78rem] font-semibold text-charcoal shadow-contact backdrop-blur-sm sm:px-3.5 sm:text-micro";
 
 function Star() {
   return (
@@ -13,12 +15,14 @@ function Star() {
 }
 
 /** The one trust signal above the fold (Script 2 module B rule 9). Always a real, checkable fact. */
-export function HeroProof({ proof }: { proof: Proof }) {
+export function HeroProof({ proof, tone = "dark" }: { proof: Proof; tone?: "dark" | "light" }) {
   const style = { "--d": "60ms" } as CSSProperties;
+  const chip = tone === "light" ? chipLight : chipDark;
+  const hover = tone === "light" ? "hover:border-olive/35" : "hover:border-cream/60";
 
   if (proof.kind === "google") {
     return (
-      <a href={proof.href} target="_blank" rel="noopener noreferrer" className={`hero-in ${chip} hover:border-cream/60`} style={style}>
+      <a href={proof.href} target="_blank" rel="noopener noreferrer" className={`hero-in ${chip} ${hover}`} style={style}>
         <Star />
         <span>
           <bdi>{proof.rating.toFixed(1)}</bdi> ב-Google · <bdi>{proof.reviewCount.toLocaleString("he-IL")}</bdi> ביקורות

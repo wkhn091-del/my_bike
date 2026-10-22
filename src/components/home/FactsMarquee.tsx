@@ -15,14 +15,17 @@ export function FactsMarquee({ event }: { event: EventContent }) {
     "החזר מלא עד 14 יום לפני",
   ];
   return (
-    <div className="border-y border-cream/10 bg-olive-deep py-5 text-cream">
+    <div className="border-t border-cream/10 bg-olive-deep py-3 text-cream sm:py-4 md:py-5">
       <span className="sr-only">{facts.join(" · ")}</span>
       <div aria-hidden="true">
-        <Marquee duration={38} gap="2.5rem">
+        <Marquee duration={38} gap="1.25rem">
           {facts.map((fact) => (
-            <span key={fact} className="flex items-center gap-10 font-display text-[clamp(1.25rem,1rem+1vw,1.75rem)] whitespace-nowrap">
+            <span
+              key={fact}
+              className="flex items-center gap-4 font-display text-[1.1rem] whitespace-nowrap sm:gap-8 sm:text-[clamp(1.05rem,0.9rem+1.2vw,1.75rem)]"
+            >
               <bdi>{fact}</bdi>
-              <span className="size-2 rounded-full bg-cream/40" />
+              <span className="size-1.5 rounded-full bg-cream/40 sm:size-2" />
             </span>
           ))}
         </Marquee>

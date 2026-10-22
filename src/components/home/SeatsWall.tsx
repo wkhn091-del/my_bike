@@ -73,13 +73,13 @@ export function SeatsWall({ capacity, taken, named, open }: Props) {
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/35 to-charcoal/10" />
         <IllustrativeTag className="top-4 start-4 bottom-auto" />
         <div className="absolute inset-x-0 bottom-0 p-6 md:p-9">
-          <p className="text-micro font-semibold tracking-wide text-cream/70">מקומות ליום הקהילה</p>
+          <p className="text-micro font-semibold tracking-[0.06em] text-cream/85">מקומות ליום הקהילה</p>
           <p className="mt-2 font-sans leading-none font-black tracking-tight">
             <bdi>
               <span ref={counterRef} className="text-[clamp(3.5rem,2.5rem+5vw,7rem)]" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {filled}
               </span>
-              <span className="text-[clamp(1.6rem,1.2rem+2vw,2.75rem)] text-cream/70">/{capacity}</span>
+              <span className="text-[clamp(1.6rem,1.2rem+2vw,2.75rem)] text-cream/85">/{capacity}</span>
             </bdi>
           </p>
           <div
@@ -102,7 +102,7 @@ export function SeatsWall({ capacity, taken, named, open }: Props) {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <div className="rounded-[1.5rem] border border-cream/12 bg-cream/[0.06] p-5 backdrop-blur-sm md:p-6">
-          <p className="text-micro font-semibold tracking-[0.16em] text-sunset">סטטוס</p>
+          <p className="text-micro font-semibold tracking-[0.08em] text-sunset">סטטוס</p>
           <p className="mt-3 text-lead text-cream/90" aria-live="polite">
             {filled === 0 ? (
               open ? (
@@ -125,12 +125,12 @@ export function SeatsWall({ capacity, taken, named, open }: Props) {
         </div>
 
         <div className="rounded-[1.5rem] border border-cream/12 bg-gradient-to-br from-sunset/20 to-cream/[0.04] p-5 md:p-6">
-          <p className="text-micro font-semibold tracking-[0.16em] text-cream/60">למה מוגבל</p>
+          <p className="text-micro font-semibold tracking-[0.06em] text-cream/85">למה מוגבל</p>
           <p className="mt-3 text-small text-cream/80">
             הקבוצה קטנה בכוונה — כדי שיואב יכיר כל רוכב, והיום יישאר אישי ולא המוני.
           </p>
           {named.length ? (
-            <p className="mt-4 text-small text-cream/65">
+            <p className="mt-4 text-small text-cream/80">
               כבר בפנים: {named
                 .slice(0, 12)
                 .map((seat) => seat.label)
@@ -141,8 +141,8 @@ export function SeatsWall({ capacity, taken, named, open }: Props) {
         </div>
 
         <div className="hidden rounded-[1.5rem] border border-dashed border-cream/15 p-5 lg:block md:p-6">
-          <p className="text-micro font-semibold tracking-[0.16em] text-cream/50">מה מחכה בשטח</p>
-          <ul className="mt-3 space-y-2 text-small text-cream/75">
+          <p className="text-micro font-semibold tracking-[0.06em] text-cream/85">מה מחכה בשטח</p>
+          <ul className="mt-3 space-y-2 text-small text-cream/85">
             <li>מסלול מודרך בלי לרדוף</li>
             <li>ארוחות לאורך היום</li>
             <li>סדנת טכניקה + צלם</li>

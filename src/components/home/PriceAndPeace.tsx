@@ -35,7 +35,7 @@ export function PriceAndPeace({ event, availability, open }: Props) {
             כמה זה עולה, ומה אם משהו משתנה
           </SplitReveal>
 
-          <div className="relative mt-8 overflow-hidden rounded-[1.75rem] shadow-[0_40px_80px_-40px_rgba(31,33,28,0.45)] ring-1 ring-charcoal/10">
+          <div className="relative mt-8 overflow-hidden rounded-[1.75rem] shadow-float ring-1 ring-charcoal/10">
             <div className="relative aspect-[16/10] min-h-[16rem]">
               <Image
                 src={ILLUSTRATIVE.price.src}
@@ -48,7 +48,7 @@ export function PriceAndPeace({ event, availability, open }: Props) {
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/55 to-charcoal/10" />
               <IllustrativeTag className="top-4 start-4 bottom-auto" />
               <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-                <p className="text-micro font-semibold tracking-[0.18em] text-cream/70">מחיר לרוכב</p>
+                <p className="text-micro font-semibold tracking-[0.06em] text-cream/85">מחיר לרוכב</p>
                 <p className="mt-2 font-sans text-[clamp(2.25rem,1.7rem+3vw,4.75rem)] leading-none font-black tracking-tight text-cream">
                   <bdi>{formatShekels(event.priceAgorot)}</bdi>
                 </p>
@@ -89,8 +89,8 @@ export function PriceAndPeace({ event, availability, open }: Props) {
           </p>
         </div>
 
-        <div className="mx-auto w-full max-w-lg rounded-[1.5rem] border border-charcoal/8 bg-gradient-to-b from-cream to-cream-deep/40 p-5 shadow-[0_24px_60px_-40px_rgba(31,33,28,0.35)] md:mx-0 md:max-w-none md:rounded-[1.75rem] md:p-8">
-          <p className="text-center text-micro font-semibold tracking-[0.16em] text-olive md:text-start">ביטול, גשם ותשלום</p>
+        <div className="mx-auto w-full max-w-lg rounded-[1.5rem] border border-charcoal/8 bg-gradient-to-b from-cream to-cream-deep/40 p-5 shadow-float md:mx-0 md:max-w-none md:rounded-[1.75rem] md:p-8">
+          <p className="text-center text-micro font-semibold tracking-[0.06em] text-olive-deep md:text-start">ביטול, גשם ותשלום</p>
           <Reveal as="ul" stagger className="mt-5 grid gap-5 md:mt-6 md:gap-6">
             <li className="flex gap-3 md:gap-4">
               <span className="grid size-9 shrink-0 place-items-center rounded-full bg-olive/10 md:size-11">

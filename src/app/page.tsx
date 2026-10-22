@@ -4,7 +4,6 @@ import { Closing } from "@/components/home/Closing";
 import { CoachingForm } from "@/components/home/CoachingForm";
 import { ContactBand } from "@/components/home/ContactBand";
 import { DaySchedule } from "@/components/home/DaySchedule";
-import { FactsMarquee } from "@/components/home/FactsMarquee";
 import { Manifesto } from "@/components/home/Manifesto";
 import { Numbers } from "@/components/home/Numbers";
 import { Hero } from "@/components/home/Hero";
@@ -21,7 +20,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { getAvailability, salesAreOpen } from "@/lib/checkout/service";
 import { getSiteContent } from "@/lib/content/get";
-import { pickHeroProof } from "@/lib/content/proof";
 import { readWall, type WallSeat } from "@/lib/db/orders";
 import { hasDatabase } from "@/lib/db/pool";
 import { turnstileSiteKey } from "@/lib/env/public";
@@ -59,10 +57,9 @@ export default async function HomePage() {
         nonce={nonce}
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(eventJsonLd(content, availability, siteUrl)) }}
       />
-      <Header overHero />
+      <Header />
       <main id="main">
-        <Hero event={event} availability={availability} open={open} proof={pickHeroProof(settings)} />
-        <FactsMarquee event={event} />
+        <Hero event={event} availability={availability} open={open} />
         <div className="relative">
           <RouteThread />
           <Manifesto event={event} />
@@ -89,15 +86,15 @@ export default async function HomePage() {
           <div className="container-x grid items-start gap-8 lg:grid-cols-[0.95fr_1.05fr]">
             <div className="space-y-6">
               <div>
-                <p className="text-micro font-semibold tracking-[0.18em] text-olive">ליווי שנתי</p>
+                <p className="text-micro font-semibold tracking-[0.06em] text-olive-deep">ליווי שנתי</p>
                 <SplitReveal id="coaching-title" className="mt-3 text-h2">
-                  רוצים להתקדם גם אחרי {event.title}?
+                  אחרי {event.title} — ליווי שנתי עם יואב
                 </SplitReveal>
                 {settings.coachingText ? <p className="mt-4 text-lead measure">{settings.coachingText}</p> : null}
               </div>
               <ul className="grid gap-3 sm:grid-cols-2">
-                {["תוכנית אימונים אישית", "מעקב לאורך השנה", "התאמה לרמה שלכם", "שיחת היכרות בלי התחייבות"].map((line) => (
-                  <li key={line} className="rounded-2xl border border-charcoal/8 bg-cream/80 px-4 py-3 text-small font-semibold text-charcoal shadow-[0_10px_30px_-24px_rgba(31,33,28,0.4)]">
+                {["תוכנית אימונים אישית", "בדיקה חודשית עם יואב", "תוכנית לפי הקצב שלכם בשטח", "שיחת היכרות בלי התחייבות"].map((line) => (
+                  <li key={line} className="rounded-2xl border border-charcoal/8 bg-cream/80 px-4 py-3 text-small font-semibold text-charcoal shadow-contact">
                     {line}
                   </li>
                 ))}
@@ -113,13 +110,12 @@ export default async function HomePage() {
 
       <StickyCta
         href="/register"
-        label={soldOut ? "לרשימת ההמתנה" : open ? `שמרו לי מקום · ${formatShekels(event.priceAgorot)}` : "לעדכון כשההרשמה נפתחת"}
-        note={
+        label={
           soldOut
-            ? "אם מתפנה מקום, נודיע ראשונים"
+            ? "לרשימת ההמתנה"
             : open
-              ? `נשארו ${availability.seatsLeft} מתוך ${event.capacity}`
-              : `${event.capacity} מקומות בלבד · ההרשמה נפתחת בקרוב`
+              ? `שמרו מקום · ${formatShekels(event.priceAgorot)}`
+              : `שמרו מקום · ${event.capacity} בלבד`
         }
       />
       <WhatsAppFloat number={settings.whatsapp} />

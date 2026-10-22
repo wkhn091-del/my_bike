@@ -18,7 +18,7 @@ export function AboutYoav({ content }: { content: SiteContent }) {
     <section aria-labelledby="yoav-title" className="section relative overflow-hidden bg-olive-deep text-cream">
       <div className={`container-x relative grid items-center gap-12 ${event.yoavImages.length ? "md:grid-cols-[1.3fr_1fr]" : ""}`}>
         <div>
-          <p className="text-micro font-semibold tracking-wide font-sans text-cream/70">מי מוביל את היום</p>
+          <p className="text-micro font-semibold tracking-[0.06em] font-sans text-cream/85">מי מוביל את היום</p>
           <ScrollWords
             as="h2"
             id="yoav-title"
@@ -29,14 +29,15 @@ export function AboutYoav({ content }: { content: SiteContent }) {
           <Reveal className="mt-10 flex items-center gap-4 border-t border-cream/15 pt-6">
             <div>
               <p className="font-display text-h3">יואב לוי</p>
-              <p className="mt-1 max-w-xl text-cream/75">
+              <p className="mt-1 max-w-xl text-cream/85">
                 רוכב כבר <bdi>{YEARS_RIDING}</bdi> שנה ומגיע מספורט תחרותי. בשלוש השנים האחרונות מאמן רוכבים {community}.
               </p>
-              {followers && asOf ? <p className="mt-1 text-micro text-cream/60">מספר העוקבים נכון ל-<bdi>{asOf}</bdi></p> : null}
+              {followers && asOf ? <p className="mt-1 text-micro text-cream/80">מספר העוקבים נכון ל-<bdi>{asOf}</bdi></p> : null}
               {settings.instagramUrl ? (
                 <p className="mt-3">
                   <a href={settings.instagramUrl} className="footer-link" target="_blank" rel="noopener noreferrer">
                     לאינסטגרם של יואב
+                    <span className="sr-only"> (נפתח בחלון חדש)</span>
                   </a>
                 </p>
               ) : null}
@@ -50,7 +51,7 @@ export function AboutYoav({ content }: { content: SiteContent }) {
                   <>
                     <span className="font-semibold">{item.title}</span>
                     {item.issuer || item.year ? (
-                      <span className="text-cream/65">
+                      <span className="text-cream/80">
                         {" · "}
                         {item.issuer}
                         {item.issuer && item.year ? ", " : ""}

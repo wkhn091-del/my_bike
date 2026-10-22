@@ -49,16 +49,19 @@ export function ConsentForm({ token, turnstileKey }: { token: string; turnstileK
           <input type="checkbox" name="agree" aria-invalid={Boolean(errors.agree)} aria-describedby={errors.agree ? "agree-error" : undefined} />
           <span>
             אני ההורה או האפוטרופוס החוקי, קראתי את{" "}
-            <Link href="/terms" target="_blank" className="link">
+            <Link href="/terms" target="_blank" rel="noopener" className="link">
               תנאי ההשתתפות
+              <span className="sr-only"> (נפתח בחלון חדש)</span>
             </Link>
             , את{" "}
-            <Link href="/terms#health" target="_blank" className="link">
+            <Link href="/terms#health" target="_blank" rel="noopener" className="link">
               הצהרת הבריאות
+              <span className="sr-only"> (נפתח בחלון חדש)</span>
             </Link>{" "}
             ואת{" "}
-            <Link href="/privacy" target="_blank" className="link">
+            <Link href="/privacy" target="_blank" rel="noopener" className="link">
               מדיניות הפרטיות
+              <span className="sr-only"> (נפתח בחלון חדש)</span>
             </Link>
             , ואני מאשר/ת את ההשתתפות.
           </span>
@@ -75,7 +78,13 @@ export function ConsentForm({ token, turnstileKey }: { token: string; turnstileK
         <button type="submit" className="btn-primary w-full" disabled={pending}>
           {pending ? "שומרים..." : "לאישור ההשתתפות"}
         </button>
-        <FormPrivacyNote />
+        <FormPrivacyNote>
+          האישור נשמר לצורך השתתפות הקטין/ה ביום הקהילה, לפי{" "}
+          <Link href="/privacy" className="link">
+            מדיניות הפרטיות
+          </Link>
+          .
+        </FormPrivacyNote>
       </div>
     </form>
   );

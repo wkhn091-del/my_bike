@@ -101,7 +101,7 @@ export function ScrollStory({ scenes }: { scenes: StoryScene[] }) {
             {scene.badge}
             <figcaption className="container-x absolute inset-x-0 bottom-0 pb-10 pe-6 md:pb-16 md:pe-10">
               <span className="block overflow-hidden">
-                <span data-line="" className="block text-micro font-semibold tracking-wide text-cream/70">
+                <span data-line="" className="block text-micro font-semibold tracking-[0.06em] text-cream/85">
                   {String(index + 1).padStart(2, "0")} · {scene.step}
                 </span>
               </span>

@@ -18,12 +18,16 @@ const verifySchema = z.object({
 });
 
 /**
- * Without a secret, only local/CI may skip (NODE_ENV development|test, or TURNSTILE_BYPASS=1).
- * Preview/production must set TURNSTILE_SECRET_KEY. Cloudflare outages fail closed.
+ * Without a secret: Preview/Production always fail closed.
+ * Local/CI may skip only when NODE_ENV is development|test, or TURNSTILE_BYPASS=1.
+ * Cloudflare outages fail closed when a secret is configured.
  */
 export async function verifyTurnstile(formData: FormData, expectedAction: TurnstileAction, ip: string): Promise<boolean> {
   const secretKey = serverEnv.TURNSTILE_SECRET_KEY;
   if (!secretKey) {
+    if (serverEnv.VERCEL_ENV === "production" || serverEnv.VERCEL_ENV === "preview") {
+      return false;
+    }
     return (
       serverEnv.NODE_ENV === "development" ||
       serverEnv.NODE_ENV === "test" ||

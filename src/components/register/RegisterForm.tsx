@@ -5,6 +5,7 @@ import { useActionState, useEffect, useRef, useState, useTransition, type FormEv
 import { checkoutAction, quoteAction } from "@/app/register/actions";
 import { FieldError, focusFirstError } from "@/components/forms/FieldError";
 import { FormPrivacyNote } from "@/components/forms/FormPrivacyNote";
+import { MarketingConsent } from "@/components/forms/MarketingConsent";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 import { TurnstileField } from "@/components/ui/TurnstileField";
 import { track } from "@/lib/analytics/track";
@@ -323,12 +324,14 @@ export function RegisterForm({ initialQuote, hasFriendDiscount, turnstileKey, pr
             <input type="checkbox" name="terms" aria-invalid={Boolean(errors.terms)} aria-describedby={describe("terms")} />
             <span>
               קראתי ואני מאשר/ת את{" "}
-              <Link href="/terms" target="_blank" className="link">
+              <Link href="/terms" target="_blank" rel="noopener" className="link">
                 תנאי ההשתתפות
+                <span className="sr-only"> (נפתח בחלון חדש)</span>
               </Link>{" "}
               ואת{" "}
-              <Link href="/terms#health" target="_blank" className="link">
+              <Link href="/terms#health" target="_blank" rel="noopener" className="link">
                 הצהרת הבריאות
+                <span className="sr-only"> (נפתח בחלון חדש)</span>
               </Link>
             </span>
           </label>
@@ -338,15 +341,7 @@ export function RegisterForm({ initialQuote, hasFriendDiscount, turnstileKey, pr
           <input type="checkbox" name="wall" />
           <span>אפשר להציג את השם הפרטי שלי ואות ראשונה בקיר הנרשמים</span>
         </label>
-        <label className="check text-small">
-          <input type="checkbox" name="marketing" />
-          <span>
-            אני מסכים/ה לקבל דיוור מ־RideWithYoav על אירועים. הסרה בכל הודעה.{" "}
-            <Link href="/privacy" className="link">
-              מדיניות הפרטיות
-            </Link>
-          </span>
-        </label>
+        <MarketingConsent />
       </div>
 
       {ok ? (
@@ -412,7 +407,13 @@ export function RegisterForm({ initialQuote, hasFriendDiscount, turnstileKey, pr
           )}
         </button>
         <p className="mt-2 text-center text-micro text-charcoal-soft">כולל מע״מ · החזר מלא עד 14 יום לפני</p>
-        <FormPrivacyNote />
+        <FormPrivacyNote>
+          הפרטים להרשמה ולתשלום ליום הקהילה, לפי{" "}
+          <Link href="/privacy" className="link">
+            מדיניות הפרטיות
+          </Link>
+          . דיוור נשלח רק אם סימנתם הסכמה למעלה.
+        </FormPrivacyNote>
       </div>
     </form>
   );

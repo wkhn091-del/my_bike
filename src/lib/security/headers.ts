@@ -13,3 +13,9 @@ export const SECURITY_HEADERS: ReadonlyArray<{ key: string; value: string }> = [
   { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
   { key: "X-DNS-Prefetch-Control", value: "off" },
 ];
+
+/** Lock-down CSP for JSON/API routes (proxy matcher skips /api, so next.config must cover them). */
+export const API_CSP_HEADER = {
+  key: "Content-Security-Policy",
+  value: "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+} as const;

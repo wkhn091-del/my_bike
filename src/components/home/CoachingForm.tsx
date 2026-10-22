@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useEffect, useRef } from "react";
 import { coachingAction, type LeadState } from "@/app/actions/leads";
 import { FieldError, focusFirstError } from "@/components/forms/FieldError";
 import { FormPrivacyNote } from "@/components/forms/FormPrivacyNote";
+import { MarketingConsent } from "@/components/forms/MarketingConsent";
 import { useSubmit } from "@/components/forms/useSubmit";
 import { TurnstileField } from "@/components/ui/TurnstileField";
 import { track } from "@/lib/analytics/track";
@@ -77,12 +79,7 @@ export function CoachingForm({ turnstileKey, responseDays, prefill, source = "ho
         />
         <FieldError id="coach-phone-error" message={errors.phone} />
       </div>
-      <label className="check text-small">
-        <input type="checkbox" name="marketing" />
-        <span>
-          אני מסכים/ה לקבל דיוור מ־RideWithYoav על אירועים. הסרה בכל הודעה / בוואטסאפ.
-        </span>
-      </label>
+      <MarketingConsent />
       <TurnstileField siteKey={turnstileKey} action="coaching" resetSignal={state} />
       {state.status === "error" ? (
         <p role="alert" className="field-error">
@@ -96,7 +93,13 @@ export function CoachingForm({ turnstileKey, responseDays, prefill, source = "ho
         <p className="mt-2 text-center text-micro text-charcoal-soft">
           {responseDays ? `יואב חוזר אליכם תוך ${responseDays} ימי עבודה. ` : ""}בלי התחייבות.
         </p>
-        <FormPrivacyNote />
+        <FormPrivacyNote>
+          הפרטים לשיחת היכרות על ליווי שנתי, לפי{" "}
+          <Link href="/privacy" className="link">
+            מדיניות הפרטיות
+          </Link>
+          . לא נשלח דיוור בלי הסימון למעלה.
+        </FormPrivacyNote>
       </div>
     </form>
   );

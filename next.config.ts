@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { SECURITY_HEADERS } from "./src/lib/security/headers";
+import { API_CSP_HEADER, SECURITY_HEADERS } from "./src/lib/security/headers";
 
 const noStore = [{ key: "Cache-Control", value: "private, no-store, max-age=0" }];
 
@@ -53,7 +53,10 @@ const nextConfig: NextConfig = {
       { source: "/consent/:path*", headers: [...noStore, { key: "X-Robots-Tag", value: "noindex" }] },
       { source: "/feedback/:path*", headers: [...noStore, { key: "X-Robots-Tag", value: "noindex" }] },
       { source: "/register", headers: noStore },
-      { source: "/api/:path*", headers: noStore },
+      {
+        source: "/api/:path*",
+        headers: [...SECURITY_HEADERS, API_CSP_HEADER, ...noStore],
+      },
     ];
   },
 };

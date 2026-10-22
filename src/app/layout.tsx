@@ -16,13 +16,14 @@ const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo", di
 export async function generateMetadata(): Promise<Metadata> {
   const { event } = await getSiteContent();
   const title = `${event.title} של RideWithYoav · יום רכיבה מודרך ${inPlace(event.region)}, ${formatShortDate(event.date)}`;
-  const description = `יום רכיבה מודרך ${inPlace(event.region)} עם ${event.capacity} רוכבים מהקהילה: ארוחות, סדנת טכניקה וצלם שרוכב איתכם — כלולים. ${event.priceAgorot / 100} ₪ לרוכב, כולל מע״מ.`;
+  const description = `קבוצה שלא בורחת קדימה: יום אחד ${inPlace(event.region)} עם יואב, ${event.capacity} רוכבים בלבד. מדריך, ארוחות וצלם כלולים — ${event.priceAgorot / 100} ₪ כולל מע״מ.`;
+  const ogImage = event.heroImage?.url ?? "/og.jpg";
   return {
     metadataBase: new URL(siteUrl),
     title: { default: title, template: "%s · RideWithYoav" },
     description,
-    openGraph: { type: "website", locale: "he_IL", siteName: "RideWithYoav", title, description, url: "/" },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: { type: "website", locale: "he_IL", siteName: "RideWithYoav", title, description, url: "/", images: [{ url: ogImage, width: 1200, height: 630, alt: `${event.title} של RideWithYoav` }] },
+    twitter: { card: "summary_large_image", title, description, images: [ogImage] },
     alternates: { canonical: "/" },
     formatDetection: { telephone: false },
   };

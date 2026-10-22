@@ -7,185 +7,184 @@ import { formatDayMonth, formatShekels, formatWeekday, inPlace } from "@/lib/for
 import { home, type HeroCard } from "@/content/home";
 import { ILLUSTRATIVE } from "@/content/illustrative";
 import { Magnetic } from "@/motion/Magnetic";
-import type { HeroProof as HeroProofData } from "@/lib/content/proof";
-import { HeroProof } from "./HeroProof";
+import { FactsMarquee } from "./FactsMarquee";
 
-type Props = { event: EventContent; availability: PublicAvailability; open: boolean; proof: HeroProofData };
+type Props = { event: EventContent; availability: PublicAvailability; open: boolean };
 
-/** 3 columns from home.hero.cards. */
-const COLS = [0, 1, 2].map((col) => home.hero.cards.filter((_, i) => i % 3 === col));
+/**
+ * Reference hero: small half-peek cards in a tight arc across the full width,
+ * bottoms tucked behind the olive facts strip.
+ */
+const FAN = [
+  { r: -7, sink: 18, dark: true },
+  { r: -5, sink: 12, dark: false },
+  { r: -3, sink: 6, dark: false },
+  { r: -1.5, sink: 2, dark: false },
+  { r: 0, sink: 0, dark: false },
+  { r: 1.5, sink: 2, dark: false },
+  { r: 3, sink: 6, dark: false },
+  { r: 5, sink: 12, dark: false },
+  { r: 7, sink: 18, dark: true },
+] as const;
 
-/** Repeat column cards so one set is tall enough to always cover the arch viewport. */
-function packColumn(cards: HeroCard[], copies = 3): HeroCard[] {
-  return Array.from({ length: copies }, () => cards).flat();
-}
-
-function ArchCard({ card }: { card: HeroCard }) {
+function FanCard({ card, index }: { card: HeroCard; index: number }) {
+  const fan = FAN[index] ?? FAN[2]!;
   return (
-    <div className="hero-card-tile">
-      <div className="relative h-full w-full">
+    <article
+      className={`hero-fan-card ${fan.dark ? "hero-fan-card--dark" : "hero-fan-card--light"}`}
+      style={
+        {
+          "--r": fan.r,
+          "--sink": `${fan.sink}px`,
+          "--i": index,
+        } as CSSProperties
+      }
+    >
+      <div className="hero-fan-chrome">
+        <div className="hero-fan-dots" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <p className="hero-fan-card-title">{card.title}</p>
+      </div>
+      <div className="hero-fan-card-photo">
         <Image
           src={card.src}
           alt=""
           fill
           quality={90}
-          sizes="(max-width: 768px) 40vw, 220px"
+          sizes="(max-width: 639px) 32vw, (max-width: 767px) 28vw, 11vw"
           className={`object-cover ${card.focus}`}
-          placeholder="empty"
         />
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-charcoal via-charcoal/80 to-transparent px-2 pb-2.5 pt-10">
-          <p className="text-center text-[0.65rem] font-bold leading-tight text-cream">{card.title}</p>
-        </div>
       </div>
-    </div>
+    </article>
   );
 }
 
-function ArchCollage() {
+function HeroFan() {
+  const cards = home.hero.cards.slice(0, FAN.length);
   return (
-    <div className="relative flex justify-center px-4 pb-4 md:h-full md:items-center md:justify-center md:self-stretch md:px-6 md:pb-8 md:pt-[calc(var(--header-h)+0.5rem)]">
-      <div className="hero-arch-float" aria-hidden="true">
-        <div className="hero-arch hero-arch-mask">
-          <div className="hero-arch-grid">
-            {COLS.map((colCards, col) => {
-              const packed = packColumn(colCards, 3);
-              return (
-                <div key={col} className={`hero-arch-col hero-arch-col-${col}`}>
-                  {/* ×2 identical packed sets → translateY(-50%) seamless upward loop */}
-                  <div className="hero-arch-track">
-                    {[0, 1].map((dup) => (
-                      <div key={dup} className="hero-arch-set">
-                        {packed.map((card, row) => (
-                          <ArchCard key={`${card.title}-${col}-${dup}-${row}`} card={card} />
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+    <div className="hero-fan" aria-hidden="true">
+      {cards.map((card, index) => (
+        <FanCard key={`${card.title}-${index}`} card={card} index={index} />
+      ))}
     </div>
   );
 }
 
-/**
- * Public hero copy unchanged — only the illustrative visual is the arched card mosaic.
- * Mobile: copy → arch (soft fade). Desktop: copy | arch (hard cut).
- */
-export function Hero({ event, availability, open, proof }: Props) {
+export function Hero({ event, availability, open }: Props) {
   const soldOut = availability.seatsLeft === 0;
   const place = inPlace(event.region);
   const earlyLeft = event.early ? Math.min(event.early.seats, availability.earlySeatsLeft) : 0;
-  const image = event.heroImage
+  const bg = event.heroImage
     ? { src: event.heroImage.url, alt: event.heroImage.alt, blur: event.heroImage.lqip }
     : { src: ILLUSTRATIVE.hero.src, alt: ILLUSTRATIVE.hero.alt, blur: null };
 
+  const ctaLabel = soldOut
+    ? "לרשימת ההמתנה"
+    : open
+      ? `שמרו מקום · ${formatShekels(event.priceAgorot)}`
+      : `שמרו מקום · ${event.capacity} בלבד`;
+
+  const ctaHint = soldOut ? (
+    <>
+      כל <bdi>{event.capacity}</bdi> המקומות נתפסו · אם מתפנה מקום, נודיע ראשונים
+    </>
+  ) : open ? (
+    <>
+      החזר מלא עד 14 יום לפני · נשארו <bdi>{availability.seatsLeft}</bdi> מתוך <bdi>{event.capacity}</bdi>
+    </>
+  ) : (
+    <>
+      החזר מלא עד 14 יום לפני · בלי חיוב עד שההרשמה נפתחת
+    </>
+  );
+
   return (
-    <section id="hero" aria-labelledby="hero-title" className="hero-stage relative isolate overflow-x-clip text-cream">
-      <div className="absolute inset-0 -z-10" aria-hidden="true">
+    <section
+      id="hero"
+      aria-labelledby="hero-title"
+      className="hero-stage-light relative isolate flex min-h-[calc(100svh-var(--header-h))] max-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden"
+    >
+      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
         <Image
-          src={image.src}
-          alt={image.alt}
+          src={bg.src}
+          alt={bg.alt}
           fill
           priority
           fetchPriority="high"
           sizes="100vw"
-          placeholder={typeof image.src === "string" ? (image.blur ? "blur" : "empty") : "blur"}
-          blurDataURL={image.blur ?? undefined}
-          className="hero-settle object-cover object-[50%_35%]"
+          placeholder={typeof bg.src === "string" ? (bg.blur ? "blur" : "empty") : "blur"}
+          blurDataURL={bg.blur ?? undefined}
+          className="object-cover object-[50%_38%] scale-105"
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-cream/35 via-transparent to-cream/20" />
       </div>
 
-      {/* Soft wash for copy only — leave the photo open around the floating arch */}
-      <div
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-charcoal/45 via-transparent to-charcoal/20 md:bg-gradient-to-l md:from-charcoal/40 md:via-transparent md:to-transparent"
-        aria-hidden="true"
-      />
-
-      <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col gap-4 pb-8 pt-[calc(var(--header-h)+0.75rem)] md:grid md:min-h-[100svh] md:grid-cols-2 md:items-center md:gap-8 md:pb-12 md:pt-[calc(var(--header-h)+1rem)]">
-        {/* Same copy as public — wording, hierarchy, CTA */}
-        <div className="hero-copy flex w-full flex-col items-center px-4 text-center drop-shadow-[0_4px_24px_rgba(0,0,0,0.55)] sm:px-6 md:items-start md:px-10 md:text-start lg:px-12">
-          <div className="pointer-events-auto flex w-full justify-center md:justify-start">
-            <HeroProof proof={proof} />
-          </div>
-
+      <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-[1180px] flex-1 flex-col px-4 pt-10 sm:px-6 sm:pt-3 md:pt-4">
+        <div className="flex shrink-0 flex-col items-center text-center">
           <p
-            className="hero-in mt-2.5 text-[0.75rem] font-semibold tracking-wide text-cream/80 sm:mt-3 sm:text-[0.78rem]"
-            style={{ "--d": "100ms" } as CSSProperties}
+            className="hero-in text-[0.8125rem] font-semibold tracking-[0.06em] text-olive-deep sm:text-micro"
+            style={{ "--d": "80ms" } as CSSProperties}
           >
-            {formatWeekday(event.date)} <bdi>{formatDayMonth(event.date)}</bdi> · {place}
+            <bdi>{formatDayMonth(event.date)}</bdi> · {event.title} · מדריך, אוכל וצלם
           </p>
 
-          <h1
-            id="hero-title"
-            className="hero-display mt-1.5 max-w-[13ch] drop-shadow-[0_8px_28px_rgba(0,0,0,0.55)] sm:mt-2 sm:max-w-[14ch]"
-          >
-            <span className="hero-line">
-              <span style={{ "--i": 0 } as CSSProperties}>די לרכוב לבד</span>
-            </span>{" "}
-            <span className="hero-line">
-              <span style={{ "--i": 1 } as CSSProperties}>{place}</span>
+          <h1 id="hero-title" className="hero-centered-display mt-2 max-w-[18ch] sm:max-w-[22ch]">
+            <span
+              className="hero-in block text-charcoal drop-shadow-[0_1px_14px_rgb(244_237_224/0.9)]"
+              style={{ "--d": "140ms" } as CSSProperties}
+            >
+              מקום ביום.
+            </span>
+            <span className="hero-in hero-accent-word mt-1 block" style={{ "--d": "260ms" } as CSSProperties}>
+              בלי להישאר מאחור
             </span>
           </h1>
 
           <p
-            className="hero-in mt-2.5 max-w-[34ch] text-[0.88rem] leading-snug text-cream/90 sm:mt-3 sm:max-w-md sm:text-[0.95rem] sm:leading-relaxed md:mt-4 md:max-w-lg md:text-lead"
-            style={{ "--d": "550ms" } as CSSProperties}
+            className="hero-in mt-2.5 max-w-[32ch] text-base leading-relaxed text-charcoal sm:max-w-[38ch] sm:text-[0.95rem]"
+            style={{ "--d": "420ms" } as CSSProperties}
           >
-            <bdi className="font-bold text-cream">{formatShekels(event.priceAgorot)}</bdi> הכול כלול ·{" "}
-            <bdi>{event.capacity}</bdi> רוכבים בלי להישאר מאחור · מדריך, אוכל וצלם
+            {formatWeekday(event.date)} {place} עם יואב · <bdi>{event.capacity}</bdi> רוכבים ·{" "}
+            <bdi className="font-bold">{formatShekels(event.priceAgorot)}</bdi> הכול כלול
           </p>
 
           {open && event.early && earlyLeft > 0 ? (
-            <p className="hero-in mt-2 text-[0.8rem] text-cream/80 sm:text-small" style={{ "--d": "650ms" } as CSSProperties}>
-              מחיר מוקדם <bdi>{formatShekels(event.early.priceAgorot)}</bdi> · נשארו <bdi>{earlyLeft}</bdi> מקומות במחיר הזה
+            <p className="hero-in mt-1 hidden text-small text-olive-deep sm:block" style={{ "--d": "500ms" } as CSSProperties}>
+              מחיר מוקדם <bdi>{formatShekels(event.early.priceAgorot)}</bdi> · נשארו <bdi>{earlyLeft}</bdi> במחיר הזה
             </p>
           ) : null}
 
-          <div
-            className="hero-in pointer-events-auto mt-4 w-full max-w-xs sm:mt-5 sm:max-w-sm md:max-w-none"
-            style={{ "--d": "750ms" } as CSSProperties}
-          >
-            <Magnetic className="w-full md:w-auto">
+          <div className="hero-in pointer-events-auto mt-4 w-full max-w-sm sm:mt-3.5 sm:max-w-xs" style={{ "--d": "560ms" } as CSSProperties}>
+            <Magnetic className="w-full">
               <CtaLink
                 href="/register"
                 id="hero-cta"
                 location="hero"
-                className="btn-primary w-full min-h-11 touch-manipulation px-5 text-[0.95rem] sm:min-h-12 sm:px-6 sm:text-base md:min-h-14 md:w-auto md:px-9 md:text-lead"
+                className="btn-primary w-full min-h-12 touch-manipulation px-6 text-base sm:px-8 sm:text-base md:min-h-14 md:text-lead"
               >
-                {soldOut
-                  ? "לרשימת ההמתנה"
-                  : open
-                    ? `שמרו מקום · ${formatShekels(event.priceAgorot)}`
-                    : `רשמו אותי לפתיחה · ${event.capacity} בלבד`}
+                {ctaLabel}
               </CtaLink>
             </Magnetic>
-            <p className="mt-2 flex items-start justify-center gap-2 text-[0.72rem] leading-snug text-cream/80 sm:mt-2.5 sm:text-[0.78rem] md:justify-start md:text-micro">
-              <span className="mt-1.5 inline-block size-1.5 shrink-0 rounded-full bg-sunset sm:size-2" aria-hidden="true" />
-              <span>
-                {soldOut ? (
-                  <>
-                    כל <bdi>{event.capacity}</bdi> המקומות נתפסו · אם מתפנה מקום, נודיע ראשונים
-                  </>
-                ) : open ? (
-                  <>
-                    החזר מלא עד 14 יום לפני · נשארו <bdi>{availability.seatsLeft}</bdi> מתוך <bdi>{event.capacity}</bdi>
-                  </>
-                ) : (
-                  <>
-                    <bdi>{event.capacity}</bdi> מקומות בלבד · בלי התחייבות עד שנפתח
-                  </>
-                )}
-              </span>
-            </p>
+            <p className="mt-2 text-center text-[0.8125rem] leading-snug text-charcoal sm:text-micro">{ctaHint}</p>
           </div>
         </div>
 
-        {/* Only change: illustrative arch collage */}
-        <ArchCollage />
+        {/* Spacer pushes the peek band to the bottom edge above the marquee */}
+        <div className="min-h-0 flex-1" aria-hidden="true" />
+      </div>
+
+      {/* Half-peek cards + olive strip — matches the reference composition */}
+      <div className="hero-peek relative z-20 mt-auto w-full shrink-0">
+        <div className="hero-fan-slot hero-in" style={{ "--d": "620ms" } as CSSProperties}>
+          <HeroFan />
+          <p className="sr-only">רגעים מיום הקהילה: רכיבה, מסלול, סדנה ושקיעה</p>
+        </div>
+        <div className="hero-peek-marquee relative z-10">
+          <FactsMarquee event={event} />
+        </div>
       </div>
     </section>
   );

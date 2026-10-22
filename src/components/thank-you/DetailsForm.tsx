@@ -7,6 +7,7 @@ import { FormPrivacyNote } from "@/components/forms/FormPrivacyNote";
 import { useSubmit } from "@/components/forms/useSubmit";
 import { TurnstileField } from "@/components/ui/TurnstileField";
 import { ageOn } from "@/lib/format";
+import Link from "next/link";
 
 export type ParticipantDefaults = {
   fullName: string;
@@ -209,7 +210,13 @@ export function DetailsForm({ token, quantity, eventDate, bikeType, participants
         <button type="submit" className="btn-secondary min-h-14 w-full text-body" disabled={pending}>
           {pending ? "שומרים..." : "לשמירת הפרטים"}
         </button>
-        <FormPrivacyNote />
+        <FormPrivacyNote>
+          פרטי הרוכבים לניהול ההזמנה וליצירת קשר ביום האירוע, לפי{" "}
+          <Link href="/privacy" className="link">
+            מדיניות הפרטיות
+          </Link>
+          .
+        </FormPrivacyNote>
       </div>
     </form>
   );

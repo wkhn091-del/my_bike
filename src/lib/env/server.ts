@@ -128,11 +128,30 @@ const serverEnvSchema = z
         message: "DEMO_PUBLIC=1 requires PAYMENTS_MODE=mock (no real charges).",
       });
     }
+    // Demo production still needs bot + abuse protection (forms fail closed without Redis).
+    if (env.VERCEL_ENV === "production" && demoPublic) {
+      if (!env.TURNSTILE_SECRET_KEY) {
+        ctx.addIssue({ code: "custom", path: ["TURNSTILE_SECRET_KEY"], message: "Required on production demo (bot protection)." });
+      }
+      if (!env.UPSTASH_REDIS_REST_URL) {
+        ctx.addIssue({ code: "custom", path: ["UPSTASH_REDIS_REST_URL"], message: "Required on production demo (shared rate limits)." });
+      }
+    }
     if (env.VERCEL_ENV === "preview" && env.PAYMENTS_MODE !== "test") {
       ctx.addIssue({ code: "custom", path: ["PAYMENTS_MODE"], message: "Preview deployments must use PAYMENTS_MODE=test (no real charges, no free mock orders)." });
     }
     if (env.VERCEL_ENV === "preview" && !env.TURNSTILE_SECRET_KEY) {
       ctx.addIssue({ code: "custom", path: ["TURNSTILE_SECRET_KEY"], message: "Required on preview (bot protection)." });
+    }
+    if (
+      (env.VERCEL_ENV === "production" || env.VERCEL_ENV === "preview") &&
+      process.env.TURNSTILE_BYPASS === "1"
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["TURNSTILE_SECRET_KEY"],
+        message: "TURNSTILE_BYPASS is forbidden on Preview/Production.",
+      });
     }
   });
 

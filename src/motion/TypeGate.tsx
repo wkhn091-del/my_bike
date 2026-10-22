@@ -101,7 +101,7 @@ export function TypeGate({ word, hint, media, children }: { word: string; hint: 
           {word}
         </text>
       </svg>
-      <p data-gate-hint="" aria-hidden="true" className="invisible absolute inset-x-0 bottom-[20%] text-center text-micro font-semibold tracking-[0.3em] text-cream/75">
+      <p data-gate-hint="" aria-hidden="true" className="invisible absolute inset-x-0 bottom-[20%] text-center text-micro font-semibold tracking-[0.1em] text-cream/85">
         {hint}
       </p>
       <p className="sr-only">{hint} להמשך התוכן</p>

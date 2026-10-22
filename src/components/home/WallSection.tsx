@@ -12,7 +12,7 @@ export function WallSection({ content, taken, named, open }: { content: SiteCont
   return (
     <section aria-labelledby="wall-title" className="section relative overflow-hidden bg-charcoal text-cream">
       <div className="container-x relative">
-        <p className="text-micro font-semibold tracking-wide text-cream/60">מקומות אמיתיים</p>
+        <p className="text-micro font-semibold tracking-[0.06em] text-cream/85">מקומות אמיתיים</p>
         <SplitReveal id="wall-title" className="mt-3 text-h2">
           מי כבר על המסלול
         </SplitReveal>
@@ -25,13 +25,13 @@ export function WallSection({ content, taken, named, open }: { content: SiteCont
             {testimonials.map((item) => (
               <figure key={`${item.name}-${item.quote.slice(0, 12)}`} className="rounded-lg border border-cream/10 bg-cream/5 p-7">
                 <blockquote className="font-display text-h3">“{item.quote}”</blockquote>
-                <figcaption className="mt-5 flex items-center gap-3 text-small font-semibold text-cream/75">
+                <figcaption className="mt-5 flex items-center gap-3 text-small font-semibold text-cream/85">
                   {item.image ? (
                     <Image src={item.image.url} alt="" width={48} height={48} className="size-12 rounded-full object-cover" />
                   ) : null}
                   <span>
                     {item.name}
-                    {item.verified ? <span className="mt-0.5 block text-micro font-normal text-cream/60">השתתף/ה ביום הקהילה</span> : null}
+                    {item.verified ? <span className="mt-0.5 block text-micro font-normal text-cream/80">השתתף/ה ביום הקהילה</span> : null}
                   </span>
                 </figcaption>
               </figure>

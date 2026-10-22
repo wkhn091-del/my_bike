@@ -29,7 +29,7 @@ export function RouteLevel({ event }: { event: EventContent }) {
         }
       >
         <div className="container-x pb-16 md:pb-24">
-          <p className="text-micro font-semibold tracking-wide text-cream/70">המסלול</p>
+          <p className="text-micro font-semibold tracking-[0.06em] text-cream/85">המסלול</p>
           <h2 id="route-title" className="mt-3 max-w-4xl text-h2">
             {route.km ? `${route.km} ק״מ ${inPlace(event.region)}, בלי לרדוף` : `שבילים ${inPlace(event.region)}, בלי לרדוף אחרי קבוצה חזקה`}
           </h2>
@@ -45,8 +45,8 @@ export function RouteLevel({ event }: { event: EventContent }) {
             <Reveal as="dl" stagger className="grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-cream/10 md:grid-cols-4">
               {stats.map((stat) => (
                 <div key={stat.label} className="bg-charcoal p-6">
-                  <Icon name={stat.icon} className="size-7 text-cream/70" />
-                  <dt className="mt-3 text-micro text-cream/60">{stat.label}</dt>
+                  <Icon name={stat.icon} className="size-7 text-cream/85" />
+                  <dt className="mt-3 text-micro text-cream/85">{stat.label}</dt>
                   <dd className="text-h3 font-bold">
                     <bdi>{stat.value}</bdi>
                   </dd>
@@ -63,6 +63,7 @@ export function RouteLevel({ event }: { event: EventContent }) {
             <p className="mt-4">
               <a href={route.stravaUrl} className="footer-link" target="_blank" rel="noopener noreferrer">
                 למסלול המלא ב-<bdi dir="ltr">Strava</bdi>
+                <span className="sr-only"> (נפתח בחלון חדש)</span>
               </a>
             </p>
           ) : null}

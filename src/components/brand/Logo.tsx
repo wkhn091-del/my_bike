@@ -17,13 +17,14 @@ export function Logo({ className = "", tone = "dark" }: { className?: string; to
   return (
     <Link
       href="/"
-      className={`inline-flex min-h-12 items-center gap-3 transition-colors duration-[var(--motion-base)] ${color} ${className}`}
+      className={`inline-flex min-h-11 flex-row items-center gap-2 transition-colors duration-[var(--motion-base)] sm:min-h-12 sm:gap-2.5 ${color} ${className}`}
       aria-label="RideWithYoav, לדף הבית"
     >
-      <LogoMark className="size-9 shrink-0" />
-      <bdi dir="ltr" className="flex items-baseline gap-[0.45em] text-[0.95rem] leading-none uppercase tracking-[0.28em]">
-        <span className="font-medium opacity-70">Ride with</span>
-        <span className="font-black">Yoav</span>
+      <LogoMark className="size-8 shrink-0 sm:size-9" />
+      <bdi dir="ltr" className="flex items-baseline gap-[0.35em] text-[0.78rem] leading-none uppercase tracking-[0.18em] sm:gap-[0.4em] sm:text-[0.9rem] sm:tracking-[0.22em]">
+        <span className="font-medium opacity-80 max-[380px]:hidden">Ride with</span>
+        <span className="hidden font-medium opacity-80 max-[380px]:inline">Ride</span>
+        <span className="font-black tracking-[0.14em] sm:tracking-[0.18em]">Yoav</span>
       </bdi>
     </Link>
   );

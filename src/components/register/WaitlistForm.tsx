@@ -107,7 +107,7 @@ export function WaitlistForm({ turnstileKey }: { turnstileKey: string | null }) 
           {pending ? "שולחים..." : "לרשימת ההמתנה"}
         </button>
         <FormPrivacyNote>
-          הפרטים ישמשו רק לעדכון על מקום פנוי, לפי{" "}
+          הפרטים רק לעדכון כשמתפנה מקום ביום הקהילה, לפי{" "}
           <Link href="/privacy" className="link">
             מדיניות הפרטיות
           </Link>

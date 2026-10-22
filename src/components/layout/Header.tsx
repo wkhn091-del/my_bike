@@ -1,12 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { CtaLink } from "@/components/ui/CtaLink";
 
+const NAV = [
+  { href: "/#price", label: "מחיר" },
+  { href: "/#included", label: "מה כלול" },
+  { href: "/#route", label: "המסלול" },
+  { href: "/#contact", label: "צור קשר" },
+] as const;
+
 /**
- * `overHero`: the header floats transparent over the full-screen hero photo and turns solid once the
- * visitor scrolls. Its CTA stays an outline so the hero's orange button is the only accent on screen.
+ * RTL header: nav + filled CTA on the right (CTA outermost), logo on the left.
  */
 export function Header({ showCta = true, ctaLabel = "להרשמה", overHero = false }: { showCta?: boolean; ctaLabel?: string; overHero?: boolean }) {
   const [solid, setSolid] = useState(!overHero);
@@ -30,20 +37,41 @@ export function Header({ showCta = true, ctaLabel = "להרשמה", overHero = f
   return (
     <header
       className={`${overHero ? "fixed inset-x-0" : "sticky"} top-0 z-40 h-[var(--header-h)] transition-[background-color,border-color] duration-[var(--motion-base)] ${
-        light ? "border-b border-transparent bg-transparent" : "border-b border-line bg-cream/90 backdrop-blur-md"
+        light ? "border-b border-transparent bg-transparent" : "border-b border-charcoal/10 bg-cream"
       }`}
     >
-      <div className="container-x flex h-full items-center justify-between">
-        <Logo tone={light ? "light" : "dark"} />
-        {showCta ? (
-          <CtaLink
-            href="/register"
-            location="header"
-            className={`btn-secondary min-h-10 px-4 transition-colors ${light ? "border-cream/70 text-cream hover:bg-cream/10" : ""}`}
-          >
-            {ctaLabel}
-          </CtaLink>
-        ) : null}
+      <div className="flex h-full w-full items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6 md:px-8 lg:px-10">
+        {/* First in RTL = right: CTA + nav */}
+        <div className="flex min-w-0 items-center gap-2.5 sm:gap-5 md:gap-7">
+          {showCta ? (
+            <CtaLink
+              href="/register"
+              location="header"
+              className={`inline-flex min-h-11 shrink-0 items-center justify-center rounded-full px-3.5 text-[0.8rem] font-semibold touch-manipulation transition-colors sm:min-h-10 sm:px-5 sm:text-[0.9rem] ${
+                light
+                  ? "border border-cream/70 bg-transparent text-cream hover:bg-cream/10"
+                  : "bg-charcoal text-cream hover:bg-charcoal/90"
+              }`}
+            >
+              {ctaLabel}
+            </CtaLink>
+          ) : null}
+          <nav aria-label="ניווט ראשי" className="hidden items-center gap-5 md:flex lg:gap-7">
+            {NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`text-[0.95rem] font-medium transition-colors ${
+                  light ? "text-cream/90 hover:text-cream" : "text-charcoal hover:text-olive-deep"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <Logo tone={light ? "light" : "dark"} className="shrink-0" />
       </div>
     </header>
   );

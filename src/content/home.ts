@@ -9,20 +9,21 @@ export type HeroCard = {
 };
 
 /**
- * Home-page only content. Hero arch mosaic cards live here — not in shared ILLUSTRATIVE.
+ * Fan cards under the centered hero — vertical phone frames, best ride stills.
+ * Copy titles mirror docs/copy-deck.md day beats (רכיבה / מסלול / קהילה / סדנה / שקיעה).
  */
 export const home = {
   hero: {
     cards: [
-      { src: ILLUSTRATIVE.moments[2]!.src, title: "רכיבה בגליל", focus: "object-[center_42%]" },
-      { src: ILLUSTRATIVE.route.src, title: "מסלול מודרך", focus: "object-[center_30%]" },
-      { src: ILLUSTRATIVE.closing.src, title: "עם החבר׳ה", focus: "object-[center_35%]" },
-      { src: ILLUSTRATIVE.moments[0]!.src, title: "ארוחות בשטח", focus: "object-[center_28%]" },
-      { src: ILLUSTRATIVE.moments[1]!.src, title: "סדנאות", focus: "object-[center_32%]" },
-      { src: ILLUSTRATIVE.moments[2]!.src, title: "שקיעה בגליל", focus: "object-[center_45%]" },
-      { src: ILLUSTRATIVE.route.src, title: "שבילי עפר", focus: "object-[center_40%]" },
-      { src: ILLUSTRATIVE.price.src, title: "צלם שרוכב איתכם", focus: "object-[center_38%]" },
-      { src: ILLUSTRATIVE.moments[0]!.src, title: "הכול כלול", focus: "object-[center_30%]" },
+      { src: ILLUSTRATIVE.dayStages[1]!.src, title: "קפה בשטח", focus: "object-[center_40%]" },
+      { src: ILLUSTRATIVE.moments[2]!.src, title: "עם החבר׳ה", focus: "object-[center_42%]" },
+      { src: ILLUSTRATIVE.dayStages[0]!.src, title: "יציאה לשטח", focus: "object-[center_38%]" },
+      { src: ILLUSTRATIVE.route.src, title: "מסלול מודרך", focus: "object-[center_32%]" },
+      { src: ILLUSTRATIVE.hero.src, title: "יום הקהילה", focus: "object-[center_40%]" },
+      { src: ILLUSTRATIVE.dayStages[3]!.src, title: "שקיעה בגליל", focus: "object-[center_45%]" },
+      { src: ILLUSTRATIVE.moments[1]!.src, title: "סדנת טכניקה", focus: "object-[center_28%]" },
+      { src: ILLUSTRATIVE.moments[0]!.src, title: "הפסקה בשטח", focus: "object-[center_35%]" },
+      { src: ILLUSTRATIVE.dayStages[2]!.src, title: "ביער", focus: "object-[center_22%]" },
     ] satisfies HeroCard[],
   },
 } as const;

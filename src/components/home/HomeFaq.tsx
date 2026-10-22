@@ -23,11 +23,11 @@ export function HomeFaq({ items }: { items: FaqItem[] }) {
 
       <div className="container-x grid gap-10 lg:grid-cols-[0.9fr_1.4fr] lg:items-start">
         <div className="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)]">
-          <p className="text-micro font-semibold tracking-[0.18em] text-olive">שאלות ותשובות</p>
+          <p className="text-micro font-semibold tracking-[0.06em] text-olive-deep">שאלות ותשובות</p>
           <SplitReveal id="faq-title" className="mt-3 text-h2">
             שאלות שרוכבים שואלים
           </SplitReveal>
-          <p className="mt-4 max-w-sm text-lead text-charcoal-soft">התשובות הקצרות בצד — והפירוט המלא ברשימה. בלי לנחש.</p>
+          <p className="mt-4 max-w-sm text-lead text-charcoal-soft">תשובות קצרות בצד. פירוט ברשימה.</p>
 
           {sideHints.length ? (
             <Reveal stagger className="mt-8 hidden gap-3 lg:grid">
@@ -35,7 +35,7 @@ export function HomeFaq({ items }: { items: FaqItem[] }) {
                 <a
                   key={item.question}
                   href={`#faq-item-${index}`}
-                  className="rounded-2xl border border-charcoal/8 bg-cream/80 p-4 shadow-[0_12px_40px_-28px_rgba(31,33,28,0.4)] transition-[border-color,transform] duration-[var(--motion-fast)] hover:border-olive/40 hover:-translate-y-0.5"
+                  className="rounded-2xl border border-charcoal/8 bg-cream/80 p-4 shadow-contact transition-[border-color,transform,box-shadow] duration-[var(--motion-base)] ease-[var(--ease-soft-out)] hover:border-olive/40 hover:-translate-y-0.5 hover:shadow-lift"
                 >
                   <span className="text-micro font-bold text-olive-deep">{String(index + 1).padStart(2, "0")}</span>
                   <span className="mt-2 block text-small font-semibold text-charcoal">{item.question}</span>
@@ -45,7 +45,7 @@ export function HomeFaq({ items }: { items: FaqItem[] }) {
           ) : null}
         </div>
 
-        <div className="rounded-[1.75rem] border border-charcoal/8 bg-cream/70 p-2 shadow-[0_30px_70px_-45px_rgba(31,33,28,0.45)] backdrop-blur-sm md:p-3">
+        <div className="rounded-[1.75rem] border border-charcoal/8 bg-cream/70 p-2 shadow-float backdrop-blur-sm md:p-3">
           <div className="divide-y divide-line overflow-hidden rounded-[1.35rem] border border-line bg-cream">
             {rest.map((item, index) => (
               <details key={item.question} id={`faq-item-${index}`} className="group px-5 md:px-6">

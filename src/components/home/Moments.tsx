@@ -59,11 +59,11 @@ export function Moments({ gallery }: { gallery: SiteImage[] }) {
   return (
     <section id="day" aria-labelledby="moments-title" className="relative bg-charcoal text-cream">
       <div className="container-x pt-20 pb-12 md:pt-32 md:pb-16">
-        <p className="text-micro font-semibold tracking-wide text-cream/60">ככה נראה היום</p>
+        <p className="text-micro font-semibold tracking-[0.06em] text-cream/85">ככה נראה היום</p>
         <SplitReveal id="moments-title" className="mt-3 max-w-3xl text-h2">
           יום שלם בחוץ, עם החבר׳ה
         </SplitReveal>
-        <p className="mt-5 max-w-xl text-lead text-cream/75">עצירה → סדנה → שקיעה. גללו.</p>
+        <p className="mt-5 max-w-xl text-lead text-cream/85">שלושה קטעים. בלי לרדוף בין לבין.</p>
       </div>
       <ScrollStory scenes={scenes} />
     </section>

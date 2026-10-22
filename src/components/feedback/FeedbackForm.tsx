@@ -7,6 +7,7 @@ import { FormPrivacyNote } from "@/components/forms/FormPrivacyNote";
 import { useSubmit } from "@/components/forms/useSubmit";
 import { TurnstileField } from "@/components/ui/TurnstileField";
 import { FEEDBACK_MAX } from "@/lib/validation/forms";
+import Link from "next/link";
 
 const RATINGS = [
   { value: 1, label: "לא טוב" },
@@ -116,7 +117,13 @@ export function FeedbackForm({ token, turnstileKey }: { token: string; turnstile
         <button type="submit" className="btn-primary w-full" disabled={pending}>
           {pending ? "שולחים..." : "לשליחת המשוב"}
         </button>
-        <FormPrivacyNote />
+        <FormPrivacyNote>
+          המשוב לשיפור היום הבא בלבד, לפי{" "}
+          <Link href="/privacy" className="link">
+            מדיניות הפרטיות
+          </Link>
+          .
+        </FormPrivacyNote>
       </div>
     </form>
   );

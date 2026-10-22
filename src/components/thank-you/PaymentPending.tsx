@@ -30,6 +30,7 @@ export function PaymentPending({ whatsapp }: { whatsapp: string }) {
           האישור מתעכב. אם חויבתם, המקום שלכם שמור והאישור יגיע במייל. שאלות?{" "}
           <a className="link" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener noreferrer">
             כתבו ליואב בוואטסאפ
+            <span className="sr-only"> (נפתח בחלון חדש)</span>
           </a>
         </p>
       )}
